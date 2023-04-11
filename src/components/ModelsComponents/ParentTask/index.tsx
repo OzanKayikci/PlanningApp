@@ -1,20 +1,22 @@
 import { Component, FC } from "react";
 import { View, Text,TouchableOpacity } from "react-native";
 import { LightColors } from "../../../constants/Colors";
-import { styles } from "./task.styles";
+import { styles } from "./parentTask.styles";
 import { ITask } from "../../../interfaces/ITask";
 import { priorities } from "../../../constants/types";
 import {  } from "react-native-gesture-handler";
+import { IParentTask } from "../../../interfaces/IParentTask";
 
 const getPriorityColor = (priority) => {
   return typeof priority === "string" ? LightColors.priorities[priority] : "";
 };
 interface ITaskViewProps {
-  Task: ITask;
+  Task: IParentTask;
 }
 
-const TaskView: FC<ITaskViewProps> = ({ Task }) => {
-  console.log(Task)
+const ParentTaskView: FC<ITaskViewProps> = ({ Task }) => {
+  
+
   return (
     <TouchableOpacity style={{backgroundColor:"orange",  borderRadius:10,
    
@@ -38,4 +40,4 @@ const TaskView: FC<ITaskViewProps> = ({ Task }) => {
   );
 };
 
-export default TaskView
+export default ParentTaskView

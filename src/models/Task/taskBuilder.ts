@@ -1,17 +1,27 @@
 import Task from ".";
-import { priorities, shapes, types } from "../../constants/types";
+import { ParentTypes, priorities, shapes, types } from "../../constants/types";
 import { ITask } from "../../interfaces/ITask";
 import { BaseBuilder } from "../baseAbstracts/BaseBuilder";
 
 export class TaskBuilder extends BaseBuilder implements ITask {
-  hasDate: boolean;
+  hasDate: boolean = false;
   startDate?: number;
   endDate?: number;
-
+  isCompleted: boolean;
   listId: number;
-  priority?:  priorities;
+  priority?: priorities;
   text: string;
-  constructor(id: number, type: types, title: string, text:string, color: string, colorShape: shapes, listId: number) {
+  parentType: ParentTypes;
+  
+  constructor(
+    id: number,
+    type: types,
+    title: string,
+    text: string,
+    color: string,
+    colorShape: string,
+    listId: number
+  ) {
     super();
     this.id = id;
     this.type = type;
@@ -20,8 +30,14 @@ export class TaskBuilder extends BaseBuilder implements ITask {
     this.colorShape = colorShape;
     this.listId = listId;
     this.text = text;
+    this.isCompleted = false;
+    this.parentType = ParentTypes.list;
   }
 
+  public serIsCompleted(isCompleted: boolean): TaskBuilder {
+    this.isCompleted = isCompleted;
+    return this;
+  }
   public setStartDate(date: number): TaskBuilder {
     this.hasDate = date > 0 ? true : false;
     this.startDate = date;
@@ -32,7 +48,7 @@ export class TaskBuilder extends BaseBuilder implements ITask {
     this.endDate = date;
     return this;
   }
-  public setPriority(priority:  priorities): TaskBuilder {
+  public setPriority(priority: priorities): TaskBuilder {
     this.priority = priority;
     return this;
   }
@@ -49,7 +65,11 @@ export class TaskBuilder extends BaseBuilder implements ITask {
     this.groupId = groupId;
     return this;
   }
-  public taskBuild() :ITask{
-    return new Task(this)
+  public setParentType(parentType: ParentTypes): TaskBuilder {
+    this.parentType = parentType;
+    return this;
+  }
+  public taskBuild(): ITask {
+    return new Task(this);
   }
 }

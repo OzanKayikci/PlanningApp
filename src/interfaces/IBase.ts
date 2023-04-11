@@ -9,5 +9,5 @@ export interface IBase{
     parentId?:number;
     groupId?:number;
     color:string;
-    colorShape:shapes;
+    colorShape: string;
 }

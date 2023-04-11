@@ -3,7 +3,7 @@ import { IParent } from "../../interfaces/IParent";
 import { Base } from "./Base";
 import { ParentBuilder } from "./ParentBuilder";
 
-export  class Parent extends Base implements IParent {
+export abstract class Parent extends Base implements IParent {
   private _children: ReactNode[];
   private _childGroupid: number;
 
@@ -13,8 +13,7 @@ export  class Parent extends Base implements IParent {
     this._childGroupid =builder.childGroupid;
   }
   
-  public get children(): ReactNode[] {
-    
+  public get children(): ReactNode[] { 
     return this._children;
   }
 

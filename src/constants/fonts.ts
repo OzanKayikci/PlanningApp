@@ -5,6 +5,9 @@ export const fonts ={
     'Poppins-SemiBold': require('../assets/fonts/Poppins-SemiBold.ttf'),
     'Poppins-ExtraBoldItalic': require('../assets/fonts/Poppins-ExtraBoldItalic.ttf'),
     'Poppins-SemiBoldItalic': require('../assets/fonts/Poppins-SemiBoldItalic.ttf'),
+    'Poppins-Italic': require('../assets/fonts/Poppins-Italic.ttf'),
+    'Poppins-MediumItalic': require('../assets/fonts/Poppins-MediumItalic.ttf'),
+    'Poppins-Medium': require('../assets/fonts/Poppins-Medium.ttf'),
 
 
 }

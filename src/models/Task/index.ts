@@ -1,4 +1,4 @@
-import { priorities } from "../../constants/types";
+import { ParentTypes, priorities } from "../../constants/types";
 import { ITask } from "../../interfaces/ITask";
 import { Base } from "../baseAbstracts/Base";
 import { BaseBuilder } from "../baseAbstracts/BaseBuilder";
@@ -11,7 +11,8 @@ export default class Task extends Base implements ITask {
   private _listId: number;
   private _priority?: priorities;
   private _text: string;
-
+  private _parentType: ParentTypes;
+  private _isCompleted: boolean;
   constructor(builder: typeof TaskBuilder.prototype) {
     super(builder);
     this._hasDate = builder.hasDate;
@@ -20,7 +21,17 @@ export default class Task extends Base implements ITask {
     this._listId = builder.listId;
     this._priority = builder.priority;
     this._text = builder.text;
+    this._parentType = builder.parentType;
   }
+
+  public get isCompleted(): boolean {
+    return this._isCompleted;
+  }
+
+  public get parentType(): ParentTypes {
+    return this._parentType;
+  }
+
   public get hasDate(): boolean {
     return this._hasDate;
   }

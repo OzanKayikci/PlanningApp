@@ -1,15 +1,13 @@
 import { ReactNode } from "react";
 import Task from ".";
-import { Parent } from "../baseAbstracts/Parent";
-import { TaskBuilder } from "./taskBuilder";
-import { ParentBuilder } from "../baseAbstracts/ParentBuilder";
+
 import { IParentTask } from "../../interfaces/IParentTask";
 import { ParentTaskBuilder } from "./parentTaskBuilder";
 
 export default class ParentTask extends Task implements IParentTask {
   private _children: ReactNode[];
   private _childGroupid: number;
-  private _TaskBuilder: TaskBuilder;
+
 
   constructor(parentTaskBuilder: typeof ParentTaskBuilder.prototype) {
     super(parentTaskBuilder);

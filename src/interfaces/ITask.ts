@@ -1,4 +1,4 @@
-import { priorities } from "../constants/types";
+import { ParentTypes, priorities } from "../constants/types";
 import { IBase } from "./IBase";
 
 export interface ITask extends IBase {
@@ -8,4 +8,6 @@ export interface ITask extends IBase {
   listId: number;
   priority?: priorities;
   text:string;
+  parentType:ParentTypes;
+  isCompleted:boolean;
 }

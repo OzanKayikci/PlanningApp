@@ -7,12 +7,9 @@ interface IListViewProps {
   List: IList;
 }
 
-const childComponent = ({item}) =>{
-
-  return (<View>
-    {item}
-  </View>)
-}
+const childComponent = ({ item }:any) => {
+  return <View>{item}</View>;
+};
 
 const ListView: FC<IListViewProps> = ({ List }) => {
   return (
@@ -22,12 +19,10 @@ const ListView: FC<IListViewProps> = ({ List }) => {
       </View>
       <View style={styles.listBody}>
         <FlatList
-               data={List.children}
-               
-               renderItem={childComponent}
-               keyExtractor={(item,index) => index.toString()}
+          data={List.children}
+          renderItem={childComponent}
+          keyExtractor={(item, index) => index.toString()}
         />
-   
       </View>
     </View>
   );

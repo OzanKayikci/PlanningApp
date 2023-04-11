@@ -1,7 +1,7 @@
 import { shapes, types } from "../../constants/types";
 import { IBase } from "../../interfaces/IBase";
 import { BaseBuilder } from "./BaseBuilder";
-export class Base implements IBase {
+export abstract class Base implements IBase {
   private _id: number;
   private _type: types;
   private _title: string;
