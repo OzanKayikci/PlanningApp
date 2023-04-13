@@ -1,4 +1,4 @@
-import { FC, ReactNode, useCallback, useState } from "react";
+import { FC, ReactNode, useCallback, useEffect, useState } from "react";
 import { IModalView } from "../../interfaces/IModal";
 import {
   Keyboard,
@@ -18,23 +18,30 @@ import { ModalTypes } from "../../constants/types";
 import { CreateListModalBody, CreateListModalHeader } from "./CreateModals/createListModal/createListModal";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
-import { useAppDispatch } from "../../redux/hooks/hooks";
-import { addButtonAction } from "../../redux/state/buttonActionSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
+import { selectButtonAction, setButtonAction } from "../../redux/state/buttonActionSlice";
 
 const { height, width } = Dimensions.get("window");
 
 const ModalView: FC<IModalView & { action: () => void }> = ({ type, children, isVisible, action }) => {
+  
+  const saveButtonActive = useAppSelector(selectButtonAction);
 
   const dispatch = useAppDispatch();
   const handleClose = useCallback(() => {
     action();
   }, [action]);
 
-  const handleSave = ()=> {
-    dispatch(addButtonAction(true));
-    handleClose()
-  }
-  
+  useEffect(() => {
+    if (!saveButtonActive) {
+      handleClose();
+    }
+  }, [saveButtonActive]);
+
+  const handleSave = () => {
+    dispatch(setButtonAction(true));
+  };
+
   let header: ReactNode;
   let body: ReactNode;
   switch (type) {
@@ -165,7 +172,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: 50,
     height: 50,
-    backgroundColor:listColors["1"],
+    backgroundColor: listColors["1"],
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",

@@ -33,13 +33,16 @@ const ZoomView = ({ children }) => {
     translateX: number;
     translateY: number;
   };
-
+  const MIN_X = -width*2;
+  const MAX_X = 100;
   const onPanEvent = useAnimatedGestureHandler<PanGestureHandlerGestureEvent, ContextType>({
     onStart: (_, context) => {
       context.translateX = translateX.value;
       context.translateY = translateY.value;
     },
     onActive: (event, context) => {
+    //  translateX.value = Math.min(Math.max(context.translateX + event.translationX, MIN_X), MAX_X);
+    
       translateX.value = context.translateX + event.translationX;
       translateY.value = context.translateY + event.translationY;
     },
@@ -66,7 +69,13 @@ const ZoomView = ({ children }) => {
   });
   return (
     <View style={styles.conteiner}>
-      <PanGestureHandler ref={panRef} onGestureEvent={onPanEvent} simultaneousHandlers={[pinchRef]}>
+      <PanGestureHandler
+        ref={panRef}
+        minPointers={1}
+        maxPointers={1}
+        onGestureEvent={onPanEvent}
+        simultaneousHandlers={[pinchRef]}
+      >
         <Animated.View>
           <PinchGestureHandler ref={pinchRef} onGestureEvent={onPinchEvent} simultaneousHandlers={[pinchRef]}>
             <Animated.View style={animationStyle}>{children}</Animated.View>

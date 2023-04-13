@@ -4,21 +4,21 @@ import { Base } from "./Base";
 import { ParentBuilder } from "./ParentBuilder";
 
 export abstract class Parent extends Base implements IParent {
-  private _children: ReactNode[];
-  private _childGroupid: number;
+   #_children: ReactNode[];
+   #_childGroupid: number;
 
   constructor(builder: typeof ParentBuilder.prototype){
     super(builder);
-    this._children = builder.children;
-    this._childGroupid =builder.childGroupid;
+    this.#_children = builder.children;
+    this.#_childGroupid =builder.childGroupid;
   }
   
   public get children(): ReactNode[] { 
-    return this._children;
+    return this.#_children;
   }
 
   public get childGroupid(): number {
-    return this._childGroupid;
+    return this.#_childGroupid;
   }
 
 }

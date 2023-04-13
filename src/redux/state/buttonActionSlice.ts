@@ -33,17 +33,15 @@ const buttonSlice = createSlice({
   name: "saveButton",
   initialState,
   reducers: {
-    addButtonAction: (state, action: PayloadAction<boolean>) => {
+    setButtonAction: (state, action: PayloadAction<boolean>) => {
+      console.log("insideslice", action.payload)
       state.isSaving = action.payload;
     },
-    deleteButtonAction: (state, action: PayloadAction<boolean>) => {
-      state.isSaving = action.payload;
-    },
-
+  
   
   },
 });
 
 export const selectButtonAction = (state:RootState) => state.saveButtonReducer.isSaving;
-export const { addButtonAction, deleteButtonAction} = buttonSlice.actions;
+export const { setButtonAction} = buttonSlice.actions;
 export default buttonSlice.reducer;

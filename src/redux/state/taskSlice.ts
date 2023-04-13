@@ -1,11 +1,8 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Base } from "../../models/baseAbstracts/Base";
-import { ITask } from "../../interfaces/ITask";
-import { TaskBuilder } from "../../models/Task/taskBuilder";
-import { priorities, shapes, types } from "../../constants/types";
-import { LightColors } from "../../constants/Colors";
+
 import Task from "../../models/Task";
 import { RootState } from "../store/store";
+import { ITask } from "../../interfaces/ITask";
 
 
 // const GetTask1 = () => {
@@ -20,7 +17,7 @@ import { RootState } from "../store/store";
 //   };
 
 export interface TodoState {
-  tasks: Task[];
+  tasks: ITask[];
 }
 
 const initialState: TodoState = {
@@ -33,20 +30,20 @@ const taskSlice = createSlice({
   name: "todos",
   initialState,
   reducers: {
-    addTask: (state, action: PayloadAction<Task>) => {
+    addTask: (state, action: PayloadAction<ITask>) => {
       state.tasks = [...state.tasks, action.payload];
     },
-    deleteTaskById: (state, action: PayloadAction<Task["id"]>) => {
+    deleteTaskById: (state, action: PayloadAction<ITask["id"]>) => {
       state.tasks = state.tasks.filter((task) => task.id === action.payload);
     },
 
-    updateTaskById: (state, action: PayloadAction<Task>) => {
+    updateTaskById: (state, action: PayloadAction<ITask>) => {
       let existingTask = state.tasks.find((task) => task.id === action.payload.id);
       if (existingTask) {
         existingTask = action.payload;
       }
     },
-    toggleTaskCompletedById: (state, action: PayloadAction<Task["id"]>) => {
+    toggleTaskCompletedById: (state, action: PayloadAction<ITask["id"]>) => {
       const existingTodo = state.tasks.find((task) => task.id === action.payload);
       if (existingTodo) {
         existingTodo.isCompleted = existingTodo.isCompleted;

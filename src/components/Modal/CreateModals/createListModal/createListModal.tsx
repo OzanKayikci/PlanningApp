@@ -7,7 +7,10 @@ import Dropdown from "../../../DropDown";
 import { shapes } from "../../../../constants/types";
 import GetShape from "../../../shapeView";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks/hooks";
-import { deleteButtonAction, selectButtonAction } from "../../../../redux/state/buttonActionSlice";
+import { selectButtonAction, setButtonAction } from "../../../../redux/state/buttonActionSlice";
+import { IListService } from "../../../../services/Abstract/IListService";
+import { ListService } from "../../../../services/Concrete/ListService";
+import { addlist } from "../../../../redux/state/listSlice";
 
 // const GetList = () => {
 //     let list: IList =
@@ -46,18 +49,24 @@ export const CreateListModalBody = () => {
   const [title, setTitle] = useState<string>("");
   const [color, setColor] = useState<string>(listColors[5]);
   const [shape, setShape] = useState<string>(shapes[1]);
- 
+
   const saveButtonActive = useAppSelector(selectButtonAction);
   const dispatch = useAppDispatch();
-  console.log("ASDFAS",saveButtonActive);
-  
   useEffect(() => {
-  
-    if(saveButtonActive){
-      dispatch(deleteButtonAction(false))
+    if (saveButtonActive) {
+      console.log("butona tıklandı");
+
+      const listService: IListService = new ListService();
+
+      listService.create(title, color, shape).then((value) => {
+        console.log("liste kaydetme başarılı");
+        console.log("value",value);
+        value !== null ? dispatch(addlist(value)) : console.log("redux liste kaydetme başarısız");
+        dispatch(setButtonAction(false));
+      });
     }
-  }, [saveButtonActive])
-  
+  }, [saveButtonActive]);
+
   return (
     <View style={[styles.container, styles.body]}>
       <View style={styles.bodyItem}>

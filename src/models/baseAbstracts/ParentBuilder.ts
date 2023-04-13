@@ -6,11 +6,11 @@ import { IBase } from "../../interfaces/IBase";
 import { shapes, types } from "../../constants/types";
 
 export abstract class ParentBuilder extends BaseBuilder implements IParent {
-  children: ReactNode[];
-  childGroupid: number;
+  children?: ReactNode[] = null;
+  childGroupid?: number = null;
 
   
-  constructor(id: number, type: types, title: string, color: string, colorShape: shapes) {
+  constructor(id: number, type: types, title: string, color: string, colorShape: string) {
     super();
     this.id = id;
     this.type = type;
