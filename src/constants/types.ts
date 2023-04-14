@@ -29,6 +29,7 @@ export enum ModalTypes{
     "listCreate",
     "listDetail",
     "taskDetail",
-    "projecDetail"
+    "projecDetail",
+    "deleteModal",
 
 }

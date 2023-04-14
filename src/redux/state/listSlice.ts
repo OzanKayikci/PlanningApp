@@ -34,7 +34,7 @@ const listSlice = createSlice({
     },
     getAllLists: (state, action: PayloadAction<IList[]>) => {
       state.lists = action.payload !== null ? action.payload : [];
-      console.log("state", state.lists);
+     
     },
     deletelistById: (state, action: PayloadAction<IList["id"]>) => {
       state.lists = state.lists.filter((list) => list.id !== action.payload);

@@ -1,8 +1,9 @@
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import styles from "./createListModal.styles";
 import { TextInput } from "react-native-gesture-handler";
 import { FC, useEffect, useState } from "react";
 import { LightColors, listColors } from "../../../../constants/Colors";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Dropdown from "../../../DropDown";
 import { shapes } from "../../../../constants/types";
 import GetShape from "../../../shapeView";
@@ -23,7 +24,6 @@ import { addlist } from "../../../../redux/state/listSlice";
 //     return <ListView List={list}></ListView>;
 //   };
 
-//TODO: service classı oluştur service classında local storageye kaydetme ve silme işlemlerini yap. service veriler reduxtan gelecek
 const colorValues = Object.values(listColors);
 const shapeValues = Object.values(shapes);
 
@@ -60,9 +60,9 @@ export const CreateListModalBody = () => {
 
       listService.create(title, color, shape).then((value) => {
         console.log("liste kaydetme başarılı");
-        console.log("value",value);
+        console.log("value", value);
         value !== null ? dispatch(addlist(value)) : console.log("redux liste kaydetme başarısız");
-        dispatch(setButtonAction(false));
+        dispatch(setButtonAction([false,""]));
       });
     }
   }, [saveButtonActive]);
@@ -105,5 +105,27 @@ export const CreateListModalBody = () => {
         />
       </View>
     </View>
+  );
+};
+export const CreateListModalFooter = () => {
+  const dispatch = useAppDispatch();
+
+  const handleSave = () => {
+    dispatch(setButtonAction([true,"save"]));
+  };
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        handleSave();
+      }}
+    >
+      <View style={styles.buttonContainer}>
+        <MaterialCommunityIcons
+          color={LightColors.secondary}
+          size={30}
+          name="playlist-plus"
+        ></MaterialCommunityIcons>
+      </View>
+    </TouchableOpacity>
   );
 };

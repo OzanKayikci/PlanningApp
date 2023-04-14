@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, LayoutChangeEvent, Dimensions, TouchableOpacity } from "react-native";
 import { PinchGestureHandler, PinchGestureHandlerGestureEvent } from "react-native-gesture-handler";
@@ -31,6 +31,8 @@ import CloseButton from "../../components/Buttons/closeButton";
 import { useAppSelector } from "../../redux/hooks/hooks";
 import { selectlists } from "../../redux/state/listSlice";
 import ListsGridView from "../../components/Lists";
+import { selectModalState } from "../../redux/state/modalSlice";
+import { CreateListModalFooter } from "../../components/Modal/CreateModals/createListModal/createListModal";
 
 const { height, width } = Dimensions.get("window");
 
@@ -100,9 +102,14 @@ const GetTask3 = () => {
 };
 
 const HomeScreen = () => {
-  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState<boolean>(useAppSelector(selectModalState));
+  const modalState = useAppSelector(selectModalState);
 
-  console.log(openModal);
+  useEffect(() => {
+    setOpenModal(modalState);
+  }, [modalState]);
+
+  console.log("modalState", openModal);
   return (
     <View>
       <ZoomView>
@@ -112,10 +119,11 @@ const HomeScreen = () => {
 
         {/* //? create Button */}
       </ZoomView>
-      <CreateListButton action={() => setOpenModal(true)} />
+      <CreateListButton />
 
-      <ModalView type={ModalTypes.listCreate} isVisible={openModal} action={() => setOpenModal(false)}>
-        <CloseButton action={() => setOpenModal(false)} />
+      <ModalView>
+        <CloseButton />
+        <View></View>
       </ModalView>
     </View>
   );

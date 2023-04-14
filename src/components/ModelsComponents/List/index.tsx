@@ -9,15 +9,13 @@ import { useAppDispatch } from "../../../redux/hooks/hooks";
 import { deletelistById } from "../../../redux/state/listSlice";
 import { LightColors } from "../../../constants/Colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { addModalState } from "../../../redux/state/modalSlice";
+import { ModalTypes } from "../../../constants/types";
 interface IListViewProps {
   List: IList;
 }
-const deleteHandle = (id: IList["id"], dispatch: any) => {
-  const listService: IListService = new ListService();
-  listService.delete(id).then((res) => {
-    console.log("list silindi", res);
-    dispatch(deletelistById(id));
-  });
+const deleteHandle = (id: IList["id"], title: IList["title"], dispatch: any) => {
+  dispatch(addModalState([ModalTypes.deleteModal, id,title]));
 };
 const childComponent = ({ item }: any) => {
   return <View>{item}</View>;
@@ -33,7 +31,7 @@ const ListView: FC<IListViewProps> = ({ List }) => {
         <TouchableOpacity
           onPress={() => {
             console.log("Delete");
-            deleteHandle(List.id, dispatch);
+            deleteHandle(List.id, List.title, dispatch);
           }}
           style={styles.deleteButton}
         >
