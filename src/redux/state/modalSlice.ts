@@ -33,6 +33,7 @@ const modalSlice = createSlice({
       };
     },
 
+
     deleteModalState: (state) => {
       state.modalState = {
         type: null,

@@ -1,4 +1,5 @@
 import { types } from "../../constants/types";
+import { IBase } from "../../interfaces/IBase";
 import { IList } from "../../interfaces/IList";
 import List from "../../models/List";
 import { ListBuilder } from "../../models/List/listBuilder";
@@ -6,7 +7,7 @@ import { useAppDispatch } from "../../redux/hooks/hooks";
 import { deletelistById } from "../../redux/state/listSlice";
 //import { addlist } from "../../redux/state/listSlice";
 import { IListService } from "../Abstract/IListService";
-import { deleteData, deleteStorage, getData, storeData } from "../StoringService";
+import { deleteData, deleteStorage, getData, storeData, updateData } from "../StoringService";
 
 export class ListService implements IListService {
   private lists: IList[] = [];
@@ -47,21 +48,17 @@ export class ListService implements IListService {
     });
   }
 
-  public async update(list: IList): Promise<string> {
-    const dispatch = useAppDispatch();
+  public async update(list: List): Promise<string> {
+    return await this.getById(list.id).then(async (data) => {
+      data = list.getAllItems;
+      console.log("update", data);
 
-    // this.getById(list.id).then((data) => {
-    //   data = list;
-    //   storeData(data, "lists").then((value) => {
-    //     value && data ? dispatch(addlist(data)) : null;
-    //     return "success";
-    //   });
-    // });
-    return "fail";
+      return await updateData(data, "lists");
+    });
   }
-  public async delete(id: number): Promise<string> {
-   return await this.getById(id).then(async (data) => {
-     return await deleteData(data, "lists")
+  public async delete(id: IBase["id"]): Promise<string> {
+    return await this.getById(id).then(async (data) => {
+      return await deleteData(data, "lists");
     });
   }
 

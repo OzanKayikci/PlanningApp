@@ -1,8 +1,7 @@
 import { FC, useState } from "react";
-import { View, Text, FlatList } from "react-native";
+import { View, Text, FlatList,TouchableOpacity } from "react-native";
 import { IList } from "../../../interfaces/IList";
 import { styles } from "./List.styles";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { IListService } from "../../../services/Abstract/IListService";
 import { ListService } from "../../../services/Concrete/ListService";
 import { useAppDispatch } from "../../../redux/hooks/hooks";
@@ -15,8 +14,13 @@ interface IListViewProps {
   List: IList;
 }
 const deleteHandle = (id: IList["id"], title: IList["title"], dispatch: any) => {
-  dispatch(addModalState([ModalTypes.deleteModal, id,title]));
+  dispatch(addModalState([ModalTypes.deleteModal, id, title]));
 };
+
+const updateHandle = (id: IList["id"], title: IList["title"], dispatch: any) => {
+  dispatch(addModalState([ModalTypes.listDetail, id]));
+}
+
 const childComponent = ({ item }: any) => {
   return <View>{item}</View>;
 };
@@ -27,7 +31,11 @@ const ListView: FC<IListViewProps> = ({ List }) => {
   return (
     <View style={[styles.listContainer, { backgroundColor: List.color }]}>
       <View style={styles.listHeader}>
-        <Text style={styles.headerText}>{List.title.toUpperCase()}</Text>
+        <TouchableOpacity onPress={()=>{ updateHandle(List.id,List.title,dispatch)}} style={styles.headerButton}>
+        
+            <Text style={styles.headerText}>{List.title}</Text>
+      
+        </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
             console.log("Delete");

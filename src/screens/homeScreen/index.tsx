@@ -33,6 +33,8 @@ import { selectlists } from "../../redux/state/listSlice";
 import ListsGridView from "../../components/Lists";
 import { selectModalState } from "../../redux/state/modalSlice";
 import { CreateListModalFooter } from "../../components/Modal/CreateModals/createListModal/createListModal";
+import { IListService } from "../../services/Abstract/IListService";
+import { ListService } from "../../services/Concrete/ListService";
 
 const { height, width } = Dimensions.get("window");
 
@@ -105,6 +107,9 @@ const HomeScreen = () => {
   const [openModal, setOpenModal] = useState<boolean>(useAppSelector(selectModalState));
   const modalState = useAppSelector(selectModalState);
 
+  //! delete for all lists
+  // const listService: IListService = new ListService();
+  // listService.deleteAll();
   useEffect(() => {
     setOpenModal(modalState);
   }, [modalState]);

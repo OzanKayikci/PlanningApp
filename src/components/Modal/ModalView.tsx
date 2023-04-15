@@ -66,6 +66,10 @@ const ModalView = ({ children }) => {
       modalStyle.modalView.height = "35%";
       modalStyle.body.flex = 2;
       break;
+      case ModalTypes.listDetail:
+        header = <CreateListModalHeader title="UPDATE LIST" />;
+        body = <CreateListModalBody />;
+        footer = <CreateListModalFooter />;
     default:
       break;
   }

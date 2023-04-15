@@ -37,6 +37,18 @@ export const deleteData = async (value: any, key: string) => {
   }
 };
 
+export const updateData = async (value: any, key: string) => {
+  try {
+    let oldValue = await getData(key);
+    let newValue = oldValue ? oldValue.map((list: any) => (list.id === value.id ? value : list)) : null;
+    const jsonValue = JSON.stringify(newValue);
+    await AsyncStorage.setItem(key, jsonValue);
+    return "success";
+  } catch (e) {
+    return "fail";
+    // saving error
+  }
+}
 
 export const deleteStorage = async (key: string) => {
   

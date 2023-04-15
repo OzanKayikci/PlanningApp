@@ -11,6 +11,7 @@ interface DropdownProps {
   headerColor?: string;
   itemColor?: string;
   type: string;
+  value: string;
   action:React.Dispatch<React.SetStateAction<string>>,
 }
 
@@ -21,9 +22,10 @@ const Dropdown: React.FC<DropdownProps > = ({
   headerColor,
   itemColor,
   type,
+  value="",
   action
 }) => {
-  const [selectedOption, setSelectedOption] = useState<string>("");
+  const [selectedOption, setSelectedOption] = useState<string>(value);
   const [showOptions, setShowOptions] = useState(false);
 
   const handleSelect = (option: string) => {

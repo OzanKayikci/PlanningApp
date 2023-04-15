@@ -41,10 +41,9 @@ const listSlice = createSlice({
     },
 
     updatelistById: (state, action: PayloadAction<IList>) => {
-      let existinglist = state.lists.find((list) => list.id === action.payload.id);
-      if (existinglist) {
-        existinglist = action.payload;
-      }
+
+      let newLists:IList[]= state.lists.map((list: any) => (list.id === action.payload.id ? action.payload : list));
+    state.lists = newLists;
     },
   },
 });
