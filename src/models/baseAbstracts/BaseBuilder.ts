@@ -11,9 +11,9 @@ export abstract class BaseBuilder {
   parentId?: number;
   groupId?: number;
   color: string;
-  colorShape: shapes;
+  colorShape: string;
 
-  public startBaseBuild(id: number, type: types, title: string, color: string, colorShape: shapes) {
+  public startBaseBuild(id: number, type: types, title: string, color: string, colorShape: string) {
     this.id = id;
     this.type = type;
     this.title = title;

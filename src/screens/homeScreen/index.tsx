@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, LayoutChangeEvent, Dimensions, TouchableOpacity } from "react-native";
 import { PinchGestureHandler, PinchGestureHandlerGestureEvent } from "react-native-gesture-handler";
@@ -12,7 +12,6 @@ import Animated, {
 import ListView from "../../components/ModelsComponents/List";
 import TaskView from "../../components/ModelsComponents/Task";
 import { LightColors, listColors } from "../../constants/Colors";
-
 
 import { ListBuilder } from "../../models/List/listBuilder";
 import { IList } from "../../interfaces/IList";
@@ -29,16 +28,18 @@ import ParentTaskView from "../../components/ModelsComponents/ParentTask";
 import CreateListButton from "../../components/Buttons/createListButton";
 import ModalView from "../../components/Modal/ModalView";
 import CloseButton from "../../components/Buttons/closeButton";
+import { useAppSelector } from "../../redux/hooks/hooks";
+import { selectlists } from "../../redux/state/listSlice";
+import ListsGridView from "../../components/Lists";
+import { selectModalState } from "../../redux/state/modalSlice";
+import { CreateListModalFooter } from "../../components/Modal/CreateModals/createListModal/createListModal";
 
 const { height, width } = Dimensions.get("window");
 
 const GetList = () => {
-  let list: IList = new ListBuilder(1, types.list, "TODO", listColors[5], shapes[1])
-    .setChildGroupId(2)
-    .setChildren([GetTask1(), GetTask2(), GetTask3()])
-    .setIsChild(false)
-    .listBuild();
-
+  const allLists = useAppSelector(selectlists);
+  console.log("allLists", allLists);
+  let list: IList = allLists[0];
   return <ListView List={list}></ListView>;
 };
 
@@ -48,14 +49,18 @@ const GetList2 = () => {
     .setChildren([GetTask1(), GetTask2(), GetTask3()])
     .setIsChild(false)
     .listBuild();
-  return <ListView List={list}></ListView>;
+
+  let lists: IList[] = [];
+  lists.push(list);
+  console.log("lililisst", lists);
+  return lists;
 };
 
 const GetTask1 = () => {
   const text =
     "Personal Mangata uygulamasını bitir. Personal Mangata uygulamasını bitir. Personal Mangata uygulamasını bitir. Personal Mangata uygulamasını bitir";
   const title = "mangata bitir";
-  let task: ITask = new TaskBuilder(1, types.task, title, text,listColors[10], shapes[1], 2)
+  let task: ITask = new TaskBuilder(1, types.task, title, text, listColors[10], shapes[1], 2)
     .SetParentId(1)
     .setPriority(priorities.low)
     .taskBuild();
@@ -75,15 +80,7 @@ const GetTask2 = () => {
 const GetTask3 = () => {
   const childtext = "Child Obje Child Obje";
   const childtitle = "Child Title";
-  let childtask: ITask = new TaskBuilder(
-    1,
-    types.task,
-    childtitle,
-    childtext,
-    listColors[12],
-    shapes[2],
-    2
-  )
+  let childtask: ITask = new TaskBuilder(1, types.task, childtitle, childtext, listColors[12], shapes[2], 2)
     .SetParentId(6)
     .setPriority(priorities.high)
     .setParentType(ParentTypes.task)
@@ -105,34 +102,28 @@ const GetTask3 = () => {
 };
 
 const HomeScreen = () => {
-  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState<boolean>(useAppSelector(selectModalState));
+  const modalState = useAppSelector(selectModalState);
 
-  console.log(openModal);
+  useEffect(() => {
+    setOpenModal(modalState);
+  }, [modalState]);
+
+  console.log("modalState", openModal);
   return (
     <View>
       <ZoomView>
         <View style={{ flexDirection: "row" }}>
-          <GetList />
-          <GetList2 />
-          <GetList2 />
-        </View>
-        <View style={{ flexDirection: "row" }}>
-          <GetList />
-          <GetList2 />
-          <GetList2 />
-        </View>
-        <View style={{ flexDirection: "row" }}>
-          <GetList />
-          <GetList2 />
-          <GetList2 />
+          <ListsGridView />
         </View>
 
         {/* //? create Button */}
       </ZoomView>
-      <CreateListButton action={() => setOpenModal(true)} />
+      <CreateListButton />
 
-      <ModalView  type={ModalTypes.listCreate}  isVisible={openModal} action={() => setOpenModal(false)}>
-        <CloseButton action={() => setOpenModal(false)} />
+      <ModalView>
+        <CloseButton />
+        <View></View>
       </ModalView>
     </View>
   );

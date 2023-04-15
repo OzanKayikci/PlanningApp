@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
 
  conteiner:{
     backgroundColor: LightColors.secondary,
-    minWidth:width,
+    width:width,
     minHeight:height,
     justifyContent:"center",
 

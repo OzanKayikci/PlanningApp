@@ -11,7 +11,6 @@ import { store } from "./redux/store/store";
 const { width, height } = Dimensions.get("window");
 import { StatusBar } from 'expo-status-bar';
 import { LightColors } from "./constants/Colors";
-//! //TODO: REDUX TAN REDUX-TOOLKİT E GEÇMEYİ UNUTMA
 const App = () => {
   return (
     <Provider store={store}>

@@ -8,42 +8,35 @@ import Task from "../../models/Task";
 import { RootState } from "../store/store";
 
 
-// const GetTask1 = () => {
-//     const text =
-//       "Personal Mangata uygulamasını bitir. Personal Mangata uygulamasını bitir. Personal Mangata uygulamasını bitir. Personal Mangata uygulamasını bitir";
-//     const title = "mangata bitir";
-//     let task: ITask = new TaskBuilder(1, types.task, title, text, LightColors.listColors[10], shapes.circle, 2)
-//       .SetParentId(1)
-//       .setPriority(priorities.low)
-//       .taskBuild();
-//       return task;
-//   };
 
 export interface ButtonState {
-  isSaving:boolean;
+  action:boolean;
+  type:"delete"|"save"|"";
 }
 
 const initialState: ButtonState = {
-    isSaving: false,
+  action: false,
+  type:""
 };
+
 
 //?Pizza gibi düşünelim.
 //? root tüm dilimler ise burası o dilimin bir parçası
 const buttonSlice = createSlice({
-  name: "saveButton",
+  name: "buttonAction",
   initialState,
   reducers: {
-    addButtonAction: (state, action: PayloadAction<boolean>) => {
-      state.isSaving = action.payload;
+    setButtonAction: (state, action: PayloadAction<[boolean,typeof state.type]>) => {
+      console.log("insideslice", action.payload)
+      state.action = action.payload[0];
+      state.type =action.payload[1];
     },
-    deleteButtonAction: (state, action: PayloadAction<boolean>) => {
-      state.isSaving = action.payload;
-    },
-
+  
   
   },
 });
 
-export const selectButtonAction = (state:RootState) => state.saveButtonReducer.isSaving;
-export const { addButtonAction, deleteButtonAction} = buttonSlice.actions;
+export const selectButtonAction = (state:RootState) => state.saveButtonReducer.action;
+export const selectButtonType= (state:RootState) => state.saveButtonReducer.type;
+export const { setButtonAction} = buttonSlice.actions;
 export default buttonSlice.reducer;

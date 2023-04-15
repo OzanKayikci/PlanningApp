@@ -1,13 +1,17 @@
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import styles from "./createListModal.styles";
 import { TextInput } from "react-native-gesture-handler";
 import { FC, useEffect, useState } from "react";
 import { LightColors, listColors } from "../../../../constants/Colors";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Dropdown from "../../../DropDown";
 import { shapes } from "../../../../constants/types";
 import GetShape from "../../../shapeView";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks/hooks";
-import { deleteButtonAction, selectButtonAction } from "../../../../redux/state/buttonActionSlice";
+import { selectButtonAction, setButtonAction } from "../../../../redux/state/buttonActionSlice";
+import { IListService } from "../../../../services/Abstract/IListService";
+import { ListService } from "../../../../services/Concrete/ListService";
+import { addlist } from "../../../../redux/state/listSlice";
 
 // const GetList = () => {
 //     let list: IList =
@@ -20,7 +24,6 @@ import { deleteButtonAction, selectButtonAction } from "../../../../redux/state/
 //     return <ListView List={list}></ListView>;
 //   };
 
-//TODO: service classı oluştur service classında local storageye kaydetme ve silme işlemlerini yap. service veriler reduxtan gelecek
 const colorValues = Object.values(listColors);
 const shapeValues = Object.values(shapes);
 
@@ -46,18 +49,24 @@ export const CreateListModalBody = () => {
   const [title, setTitle] = useState<string>("");
   const [color, setColor] = useState<string>(listColors[5]);
   const [shape, setShape] = useState<string>(shapes[1]);
- 
+
   const saveButtonActive = useAppSelector(selectButtonAction);
   const dispatch = useAppDispatch();
-  console.log("ASDFAS",saveButtonActive);
-  
   useEffect(() => {
-  
-    if(saveButtonActive){
-      dispatch(deleteButtonAction(false))
+    if (saveButtonActive) {
+      console.log("butona tıklandı");
+
+      const listService: IListService = new ListService();
+
+      listService.create(title, color, shape).then((value) => {
+        console.log("liste kaydetme başarılı");
+        console.log("value", value);
+        value !== null ? dispatch(addlist(value)) : console.log("redux liste kaydetme başarısız");
+        dispatch(setButtonAction([false,""]));
+      });
     }
-  }, [saveButtonActive])
-  
+  }, [saveButtonActive]);
+
   return (
     <View style={[styles.container, styles.body]}>
       <View style={styles.bodyItem}>
@@ -96,5 +105,27 @@ export const CreateListModalBody = () => {
         />
       </View>
     </View>
+  );
+};
+export const CreateListModalFooter = () => {
+  const dispatch = useAppDispatch();
+
+  const handleSave = () => {
+    dispatch(setButtonAction([true,"save"]));
+  };
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        handleSave();
+      }}
+    >
+      <View style={styles.buttonContainer}>
+        <MaterialCommunityIcons
+          color={LightColors.secondary}
+          size={30}
+          name="playlist-plus"
+        ></MaterialCommunityIcons>
+      </View>
+    </TouchableOpacity>
   );
 };

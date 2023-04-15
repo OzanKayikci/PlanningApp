@@ -1,14 +1,11 @@
-
 import { ReactNode } from "react";
 import { IList } from "../../interfaces/IList";
 import { ParentBuilder } from "../baseAbstracts/ParentBuilder";
-import  List  from ".";
+import List from ".";
 import { shapes, types } from "../../constants/types";
 
-
 export class ListBuilder extends ParentBuilder implements IList {
-  
-  constructor(id: number, type: types, title: string, color: string, colorShape: shapes) {
+  constructor(id: number, type: types, title: string, color: string, colorShape: string) {
     super(id, type, title, color, colorShape);
   }
 
@@ -20,19 +17,23 @@ export class ListBuilder extends ParentBuilder implements IList {
     this.childGroupid = childGroupid;
     return this;
   }
-
+  public SetParentId(parentId: number): ListBuilder {
+    this.parentId = parentId;
+    return this;
+  }
   public setIsChild(isChild: boolean): ListBuilder {
-      this.isChild = isChild;
-      return this
+    this.isChild = isChild;
+    return this;
   }
   public setIsParent(IsParent: boolean): ListBuilder {
-      this.IsParent = IsParent;
-      return this
+    this.IsParent = IsParent;
+    return this;
   }
   public setGroupId(groupId: number): ListBuilder {
-      this.groupId = groupId;
-      return this
+    this.groupId = groupId;
+    return this;
   }
-  public listBuild = ():IList => {
-    return new List(this)};
+  public listBuild = (): List => {
+    return new List(this);
+  };
 }

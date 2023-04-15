@@ -1,50 +1,52 @@
 import { useCallback } from "react";
+
 import { StyleSheet, View, Dimensions, TouchableOpacity } from "react-native";
 
 import { LightColors, listColors } from "../../constants/Colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { deleteModalState } from "../../redux/state/modalSlice";
 import { useAppDispatch } from "../../redux/hooks/hooks";
+import { addModalState, deleteModalState } from "../../redux/state/modalSlice";
+import { ModalTypes } from "../../constants/types";
+import { deletelistById } from "../../redux/state/listSlice";
+import { setButtonAction } from "../../redux/state/buttonActionSlice";
 const { width, height } = Dimensions.get("window");
 
-const handleClose = (dispatch: any) => {
-  console.log("closee")
-  dispatch(deleteModalState());
+const handleDelete = (dispatch: any) => {
+  dispatch(setButtonAction([true,"delete"]));
 };
 
-const CloseButton = () => {
+const DeleteButton = () => {
   const dispatch = useAppDispatch();
+
   return (
-    <View style={styles.container}>
+  
       <TouchableOpacity
         onPress={() => {
-          handleClose(dispatch);
+          handleDelete(dispatch);
         }}
       >
         <View style={styles.buttonContainer}>
           <MaterialCommunityIcons
-            color={LightColors.secondary}
+            color={LightColors.primary}
             size={30}
-            name="close"
+            name="delete-forever-outline"
           ></MaterialCommunityIcons>
         </View>
       </TouchableOpacity>
-    </View>
+   
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    //backgroundColor: "red",
-  },
+
   buttonContainer: {
     width: 50,
     height: 50,
-    backgroundColor: listColors["9"],
+    backgroundColor: LightColors.priorities.high,
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
   },
 });
 
-export default CloseButton;
+export default DeleteButton;
