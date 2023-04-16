@@ -4,6 +4,7 @@ export const LightColors = {
   tertiary: "#666666",
   quaternary: "#F9F9F9",
   white: "#ffffff",
+  darkBackground: "#252525",
   priorities: {
     low: "#ACF39D",
     medium: "#F0CA81",

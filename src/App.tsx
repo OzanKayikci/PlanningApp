@@ -19,7 +19,7 @@ const App = () => {
           <AppNavigation />
         </GestureHandlerRootView>
       </SafeAreaView>
-      <StatusBar style="light" backgroundColor={LightColors.secondary}/>
+      <StatusBar style="light" backgroundColor={LightColors.darkBackground}/>
     </Provider>
   );
 };
