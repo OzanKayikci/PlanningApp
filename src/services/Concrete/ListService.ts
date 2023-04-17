@@ -16,7 +16,8 @@ export class ListService implements IListService {
   public async create(
     title: IList["title"],
     color: IList["color"],
-    shape: IList["colorShape"]
+    shape: IList["colorShape"],
+    groupId: IList["groupId"]
   ): Promise<IList | null> {
     const lists = await this.getAll().then((data) => {
       return data;
@@ -24,7 +25,7 @@ export class ListService implements IListService {
     const netId: number = lists !== null ? lists[lists.length - 1].id + 1 : 100;
     let newList: List = new ListBuilder(netId, types.list, title, color, shape)
       .SetParentId(0)
-      .setGroupId(0)
+      .setGroupId(groupId)
       .setChildren([])
       .setChildGroupId(0)
       .setIsParent(true)

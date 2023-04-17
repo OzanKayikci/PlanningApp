@@ -15,10 +15,10 @@ import { BlurView } from "expo-blur";
 import { LightColors, listColors } from "../../constants/Colors";
 import { ModalTypes } from "../../constants/types";
 import {
-  CreateListModalBody,
-  CreateListModalFooter,
-  CreateListModalHeader,
-} from "./CreateModals/createListModal/createListModal";
+  CreateParentModalBody,
+  CreateParentModalFooter,
+  CreateParentModalHeader,
+} from "./CreateModals/createParentItemModal";
 
 import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
 import { selectButtonAction } from "../../redux/state/buttonActionSlice";
@@ -51,9 +51,9 @@ const ModalView = ({ children }) => {
   let modalStyle = styles;
   switch (modalType) {
     case ModalTypes.listCreate:
-      header = <CreateListModalHeader />;
-      body = <CreateListModalBody />;
-      footer = <CreateListModalFooter />;
+      header = <CreateParentModalHeader />;
+      body = <CreateParentModalBody />;
+      footer = <CreateParentModalFooter />;
 
       modalStyle.modalView.height = "95%";
       modalStyle.body.flex = 10;
@@ -67,9 +67,14 @@ const ModalView = ({ children }) => {
       modalStyle.body.flex = 2;
       break;
       case ModalTypes.listDetail:
-        header = <CreateListModalHeader title="UPDATE LIST" />;
-        body = <CreateListModalBody />;
-        footer = <CreateListModalFooter />;
+        header = <CreateParentModalHeader title="UPDATE LIST" />;
+        body = <CreateParentModalBody />;
+        footer = <CreateParentModalFooter />;
+        break;
+      case ModalTypes.projectCreate:
+        header = <CreateParentModalHeader title="NEW PROJECT" />;
+        body = <CreateParentModalBody />;
+        footer = <CreateParentModalFooter />;
     default:
       break;
   }

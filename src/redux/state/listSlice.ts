@@ -17,10 +17,12 @@ import { IList } from "../../interfaces/IList";
 
 export interface TodoState {
   lists: IList[];
+  allLists:IList[]
 }
 
 const initialState: TodoState = {
   lists: [],
+  allLists:[]
 };
 
 //?Pizza gibi düşünelim.
@@ -32,8 +34,14 @@ const listSlice = createSlice({
     addlist: (state, action: PayloadAction<IList>) => {
       state.lists = [...state.lists, action.payload];
     },
+    getProjectLists: (state, action: PayloadAction<[IList[],IList["groupId"]]>) => {
+  
+      state.lists = action.payload[0] !== null ? action.payload[0].filter((list) => list.groupId === action.payload[1]) : [];
+     
+    },
     getAllLists: (state, action: PayloadAction<IList[]>) => {
-      state.lists = action.payload !== null ? action.payload : [];
+  
+      state.allLists = action.payload !== null ? action.payload : [];
      
     },
     deletelistById: (state, action: PayloadAction<IList["id"]>) => {
@@ -49,5 +57,6 @@ const listSlice = createSlice({
 });
 
 export const selectlists = (state: RootState) => state.listReducer.lists;
-export const { addlist, deletelistById, updatelistById,getAllLists } = listSlice.actions;
+export const selectAlllists = (state: RootState) => state.listReducer.allLists;
+export const { addlist, deletelistById, updatelistById,getProjectLists,getAllLists } = listSlice.actions;
 export default listSlice.reducer;

@@ -22,10 +22,16 @@ import ListsGridView from "../../components/Lists";
 import { selectModalState } from "../../redux/state/modalSlice";
 import { LightColors } from "../../constants/Colors";
 import DraverButton from "../../components/drawerComponent.tsx/DrawerNavigationButton";
+import { IProjectService } from "../../services/Abstract/IProjectService";
+import { ProjectService } from "../../services/Concrete/ProjectService";
+import { selectSelectedProject } from "../../redux/state/selectedProjectSlice";
+import { IListService } from "../../services/Abstract/IListService";
+import { ListService } from "../../services/Concrete/ListService";
 
 const { height, width } = Dimensions.get("window");
 
 const Header = (props: any) => {
+  const selectedProject = useAppSelector(selectSelectedProject);
   return (
     <View style={styles.headerContainer}>
       <DraverButton navigation={props.navigation} />
@@ -34,7 +40,7 @@ const Header = (props: any) => {
           <Zocial
             name="pinboard"
             size={20}
-            color={LightColors.priorities.low}
+            color={selectedProject.color}
             style={{
               shadowOpacity: 2,
               textShadowRadius: 2,
@@ -42,7 +48,7 @@ const Header = (props: any) => {
             }}
           />
         </View>
-        <Text style={styles.headerText}>My Project</Text>
+        <Text style={styles.headerText}>{selectedProject.title}</Text>
       </View>
     </View>
   );
@@ -54,6 +60,9 @@ const HomeScreen = ({ navigation }) => {
   //! delete for all lists
   // const listService: IListService = new ListService();
   // listService.deleteAll();
+  //  const projectService: IProjectService = new ProjectService();
+  //  projectService.deleteAll();
+
   useEffect(() => {
     setOpenModal(modalState);
   }, [modalState]);
