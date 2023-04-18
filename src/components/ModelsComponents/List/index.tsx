@@ -9,12 +9,12 @@ import { deletelistById } from "../../../redux/state/listSlice";
 import { LightColors } from "../../../constants/Colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { addModalState } from "../../../redux/state/modalSlice";
-import { ModalTypes } from "../../../constants/types";
+import { ModalTypes, types } from "../../../constants/types";
 interface IListViewProps {
   List: IList;
 }
 const deleteHandle = (id: IList["id"], title: IList["title"], dispatch: any) => {
-  dispatch(addModalState([ModalTypes.deleteModal, id, title]));
+  dispatch(addModalState([ModalTypes.deleteModal, id, title,types.list]));
 };
 
 const updateHandle = (id: IList["id"], title: IList["title"], dispatch: any) => {

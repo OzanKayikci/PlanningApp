@@ -22,7 +22,7 @@ import { IProjectService } from "../../../../services/Abstract/IProjectService";
 import { ProjectService } from "../../../../services/Concrete/ProjectService";
 import Project from "../../../../models/Project";
 import { ProjectBuilder } from "../../../../models/Project/projectBuilder";
-import { updateProjectById } from "../../../../redux/state/projectSlice";
+import { addProject, updateProjectById } from "../../../../redux/state/projectSlice";
 import { selectSelectedProject } from "../../../../redux/state/selectedProjectSlice";
 
 // const GetList = () => {
@@ -57,6 +57,9 @@ export const CreateParentModalHeader = ({ title = "NEW LIST" }) => {
   );
 };
 
+
+//TODO: handle klasörü oluştur.  create ve update methodlarını oraya taşı.
+//TODO: Parent service oluştur ve ortak işlemleri orada yürüt
 const createANewParent = (
   title: IBase["title"],
   color: IBase["color"],
@@ -71,7 +74,7 @@ const createANewParent = (
     parentService.create(title, color, shape, selectedProjectId).then((value) => {
     console.log("liste kaydetme başarılı");
     console.log("value", value);
-    value !== null ? dispatch(addlist(value)) : console.log("redux liste kaydetme başarısız");
+    value !== null ? dispatch(parentType === ParentTypes.project? addProject(value) : addlist(value)) : console.log("redux liste kaydetme başarısız");
     dispatch(setButtonAction([false, ""]));
   });
 };

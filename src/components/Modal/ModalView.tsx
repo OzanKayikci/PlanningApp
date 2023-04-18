@@ -66,15 +66,19 @@ const ModalView = ({ children }) => {
       modalStyle.modalView.height = "35%";
       modalStyle.body.flex = 2;
       break;
-      case ModalTypes.listDetail:
-        header = <CreateParentModalHeader title="UPDATE LIST" />;
-        body = <CreateParentModalBody />;
-        footer = <CreateParentModalFooter />;
-        break;
-      case ModalTypes.projectCreate:
-        header = <CreateParentModalHeader title="NEW PROJECT" />;
-        body = <CreateParentModalBody />;
-        footer = <CreateParentModalFooter />;
+    case ModalTypes.listDetail:
+      header = <CreateParentModalHeader title="UPDATE LIST" />;
+      body = <CreateParentModalBody />;
+      footer = <CreateParentModalFooter />;
+      modalStyle.modalView.height = "95%";
+      modalStyle.body.flex = 10;
+      break;
+    case ModalTypes.projectCreate:
+      header = <CreateParentModalHeader title="NEW PROJECT" />;
+      body = <CreateParentModalBody />;
+      footer = <CreateParentModalFooter />;
+      modalStyle.modalView.height = "95%";
+      modalStyle.body.flex = 10;
     default:
       break;
   }

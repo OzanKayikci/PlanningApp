@@ -48,15 +48,16 @@ export const updateData = async (value: any, key: string) => {
     return "fail";
     // saving error
   }
-}
+};
 
 export const deleteStorage = async (key: string) => {
-  
   try {
-    await AsyncStorage.removeItem(key);
+    const jsonValue = await AsyncStorage.getItem(key);
+    jsonValue != null ? await AsyncStorage.removeItem(key) : null;
+
     return "success";
   } catch (e) {
     return "fail";
     // saving error
   }
-}
+};

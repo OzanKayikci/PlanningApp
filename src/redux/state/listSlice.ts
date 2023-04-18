@@ -17,12 +17,12 @@ import { IList } from "../../interfaces/IList";
 
 export interface TodoState {
   lists: IList[];
-  allLists:IList[]
+  allLists: IList[];
 }
 
 const initialState: TodoState = {
   lists: [],
-  allLists:[]
+  allLists: [],
 };
 
 //?Pizza gibi düşünelim.
@@ -33,30 +33,36 @@ const listSlice = createSlice({
   reducers: {
     addlist: (state, action: PayloadAction<IList>) => {
       state.lists = [...state.lists, action.payload];
+      state.allLists = [...state.allLists, action.payload];
     },
-    getProjectLists: (state, action: PayloadAction<[IList[],IList["groupId"]]>) => {
-  
-      state.lists = action.payload[0] !== null ? action.payload[0].filter((list) => list.groupId === action.payload[1]) : [];
-     
+    getProjectLists: (state, action: PayloadAction<[IList[], IList["groupId"]]>) => {
+      state.lists =
+        action.payload[0] !== null
+          ? action.payload[0].filter((list) => list.groupId === action.payload[1])
+          : [];
     },
     getAllLists: (state, action: PayloadAction<IList[]>) => {
-  
       state.allLists = action.payload !== null ? action.payload : [];
-     
     },
     deletelistById: (state, action: PayloadAction<IList["id"]>) => {
       state.lists = state.lists.filter((list) => list.id !== action.payload);
+      state.allLists = state.allLists.filter((list) => list.id !== action.payload);
     },
 
     updatelistById: (state, action: PayloadAction<IList>) => {
-
-      let newLists:IList[]= state.lists.map((list: any) => (list.id === action.payload.id ? action.payload : list));
-    state.lists = newLists;
+      let newLists: IList[] = state.lists.map((list: any) =>
+        list.id === action.payload.id ? action.payload : list
+      );
+      let newAllLists: IList[] = state.allLists.map((list: any) =>
+        list.id === action.payload.id ? action.payload : list
+      );
+      state.lists = newLists;
+      state.allLists = newAllLists;
     },
   },
 });
 
 export const selectlists = (state: RootState) => state.listReducer.lists;
 export const selectAlllists = (state: RootState) => state.listReducer.allLists;
-export const { addlist, deletelistById, updatelistById,getProjectLists,getAllLists } = listSlice.actions;
+export const { addlist, deletelistById, updatelistById, getProjectLists, getAllLists } = listSlice.actions;
 export default listSlice.reducer;

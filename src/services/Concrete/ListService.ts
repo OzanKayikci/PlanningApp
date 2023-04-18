@@ -62,7 +62,17 @@ export class ListService implements IListService {
       return await deleteData(data, "lists");
     });
   }
-
+  public async deleteByGroupId(groupId: number): Promise<string> {
+    await this.getAll().then(async (data) => {
+      data.map(async (list) => {
+        if (list.groupId === groupId) {
+          await this.delete(list.id);
+        }
+      });
+      return "success";
+    });
+    return "fail";
+  }
   public async deleteAll(): Promise<string> {
     const result = await deleteStorage("lists");
     console.log("res", result);
