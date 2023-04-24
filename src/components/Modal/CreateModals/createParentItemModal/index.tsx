@@ -1,18 +1,17 @@
 import { Text, TouchableOpacity, View } from "react-native";
 import styles from "./createParentItemModal.styles";
 import { TextInput } from "react-native-gesture-handler";
-import { FC, useEffect, useState } from "react";
+import { FC, ReactNode, useEffect, useState } from "react";
 import { LightColors, listColors } from "../../../../constants/Colors";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Dropdown from "../../../DropDown";
-import { ModalTypes, ParentTypes, shapes } from "../../../../constants/types";
+import { ModalTypes, ParentTypes, shapes, types } from "../../../../constants/types";
 import GetShape from "../../../shapeView";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks/hooks";
 import { selectButtonAction, setButtonAction } from "../../../../redux/state/buttonActionSlice";
 import { IListService } from "../../../../services/Abstract/IListService";
 import { ListService } from "../../../../services/Concrete/ListService";
 import { addlist, updatelistById } from "../../../../redux/state/listSlice";
-import { selectModal } from "../../../../redux/state/modalSlice";
+import { addModalState, deleteModalState, selectModal } from "../../../../redux/state/modalSlice";
 import { IBase } from "../../../../interfaces/IBase";
 import { IList } from "../../../../interfaces/IList";
 import { ListBuilder } from "../../../../models/List/listBuilder";
@@ -23,7 +22,7 @@ import { ProjectService } from "../../../../services/Concrete/ProjectService";
 import Project from "../../../../models/Project";
 import { ProjectBuilder } from "../../../../models/Project/projectBuilder";
 import { addProject, updateProjectById } from "../../../../redux/state/projectSlice";
-import { selectSelectedProject } from "../../../../redux/state/selectedProjectSlice";
+import { selectSelectedProject, setSelectedProject } from "../../../../redux/state/selectedProjectSlice";
 
 // const GetList = () => {
 //     let list: IList =
@@ -57,7 +56,6 @@ export const CreateParentModalHeader = ({ title = "NEW LIST" }) => {
   );
 };
 
-
 //TODO: handle klasörü oluştur.  create ve update methodlarını oraya taşı.
 //TODO: Parent service oluştur ve ortak işlemleri orada yürüt
 const createANewParent = (
@@ -66,15 +64,17 @@ const createANewParent = (
   shape: IBase["colorShape"],
   dispatch: any,
   parentType: ParentTypes,
-  selectedProjectId:IBase["groupId"] = 0
+  selectedProjectId: IBase["groupId"] = 0
 ) => {
   const parentService: IListService | IProjectService =
     parentType === ParentTypes.project ? new ProjectService() : new ListService();
- 
-    parentService.create(title, color, shape, selectedProjectId).then((value) => {
+
+  parentService.create(title, color, shape, selectedProjectId).then((value) => {
     console.log("liste kaydetme başarılı");
     console.log("value", value);
-    value !== null ? dispatch(parentType === ParentTypes.project? addProject(value) : addlist(value)) : console.log("redux liste kaydetme başarısız");
+    value !== null
+      ? dispatch(parentType === ParentTypes.project ? addProject(value) : addlist(value))
+      : console.log("redux liste kaydetme başarısız");
     dispatch(setButtonAction([false, ""]));
   });
 };
@@ -132,7 +132,7 @@ const updateParent = (
     value === "success"
       ? dispatch(
           parentType === ParentTypes.project
-            ? updateProjectById(updatedParent.getAllItems)
+            ? (updateProjectById(updatedParent.getAllItems), setSelectedProject(updatedParent.getAllItems))
             : updatelistById(updatedParent.getAllItems)
         )
       : console.log("redux parent kaydetme başarısız");
@@ -146,6 +146,7 @@ export const CreateParentModalBody = () => {
   const [shape, setShape] = useState<string>(shapes[1]);
 
   const [listforUpdate, setListforUpdate] = useState<IList>(null);
+  const [parentforUpdate, setParentforUpdate] = useState<IParent>(null);
 
   const saveButtonActive = useAppSelector(selectButtonAction);
   const selectedProject = useAppSelector(selectSelectedProject);
@@ -160,10 +161,23 @@ export const CreateParentModalBody = () => {
         const listService: IListService = new ListService();
         listService.getById(modalProps.elementId).then((value) => {
           setListforUpdate(value);
+          console.log("valval", value);
           setTitle(value.title);
           setColor(value.color);
           setShape(value.colorShape);
         });
+        break;
+      case ModalTypes.projectDetail:
+        const projectService: IProjectService = new ProjectService();
+        projectService.getById(modalProps.elementId).then((value) => {
+          setParentforUpdate(value);
+          setTitle(value.title);
+          setColor(value.color);
+          setShape(value.colorShape);
+        });
+        break;
+      default:
+        break;
     }
   }, [modalProps]);
 
@@ -172,13 +186,16 @@ export const CreateParentModalBody = () => {
       console.log("butona tıklandı saveButtonActive", saveButtonActive, modalProps);
       switch (modalProps.type) {
         case ModalTypes.listCreate:
-          createANewParent(title, color, shape, dispatch, ParentTypes.list,selectedProject.id);
+          createANewParent(title, color, shape, dispatch, ParentTypes.list, selectedProject.id);
           break;
         case ModalTypes.listDetail:
           updateParent(listforUpdate, title, color, shape, dispatch, ParentTypes.list);
           break;
         case ModalTypes.projectCreate:
           createANewParent(title, color, shape, dispatch, ParentTypes.project);
+          break;
+        case ModalTypes.projectDetail:
+          updateParent(parentforUpdate, title, color, shape, dispatch, ParentTypes.project);
           break;
         default:
           break;
@@ -228,25 +245,4 @@ export const CreateParentModalBody = () => {
     </View>
   );
 };
-export const CreateParentModalFooter = () => {
-  const dispatch = useAppDispatch();
 
-  const handleSave = () => {
-    dispatch(setButtonAction([true, "save"]));
-  };
-  return (
-    <TouchableOpacity
-      onPress={() => {
-        handleSave();
-      }}
-    >
-      <View style={styles.buttonContainer}>
-        <MaterialCommunityIcons
-          color={LightColors.secondary}
-          size={30}
-          name="playlist-plus"
-        ></MaterialCommunityIcons>
-      </View>
-    </TouchableOpacity>
-  );
-};

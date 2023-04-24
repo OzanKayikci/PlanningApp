@@ -61,6 +61,10 @@ export class TaskBuilder extends BaseBuilder implements ITask {
     this.parentId = parentId;
     return this;
   }
+  public setIsParent(IsParent: boolean): TaskBuilder {
+    this.IsParent = IsParent;
+    return this;
+  }
   public setGroupId(groupId: number): TaskBuilder {
     this.groupId = groupId;
     return this;
@@ -69,7 +73,7 @@ export class TaskBuilder extends BaseBuilder implements ITask {
     this.parentType = parentType;
     return this;
   }
-  public taskBuild(): ITask {
+  public taskBuild(): Task {
     return new Task(this);
   }
 }

@@ -1,4 +1,4 @@
-import React, { ComponentType, useCallback, useState } from "react";
+import React, { ComponentType, useCallback, useEffect, useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { styles } from "./dropDown.styles";
 import { FlatList } from "react-native-gesture-handler";
@@ -12,18 +12,18 @@ interface DropdownProps {
   itemColor?: string;
   type: string;
   value: string;
-  action:React.Dispatch<React.SetStateAction<string>>,
+  action: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const Dropdown: React.FC<DropdownProps > = ({
+const Dropdown: React.FC<DropdownProps> = ({
   options,
   SecondElement,
   backgroundColor,
   headerColor,
   itemColor,
   type,
-  value="",
-  action
+  value = "",
+  action,
 }) => {
   const [selectedOption, setSelectedOption] = useState<string>(value);
   const [showOptions, setShowOptions] = useState(false);
@@ -34,6 +34,10 @@ const Dropdown: React.FC<DropdownProps > = ({
 
     setShowOptions(false);
   };
+
+  useEffect(() => {
+    setSelectedOption(value);
+  }, [value]);
 
   //?flatList Item
   const Item = ({ item }: any) => {
@@ -46,12 +50,11 @@ const Dropdown: React.FC<DropdownProps > = ({
           ]}
         >
           <Text style={styles.item}>{item}</Text>
-          {SecondElement && <SecondElement item={item}/>}
+          {SecondElement && <SecondElement item={item} />}
         </View>
       </TouchableOpacity>
     );
   };
-
 
   return (
     <View style={[styles.dropdownContainer]}>
@@ -81,7 +84,6 @@ const Dropdown: React.FC<DropdownProps > = ({
               renderItem={Item}
               scrollEnabled
               keyExtractor={(item, index) => index.toString()}
-         
             />
           </View>
         </View>

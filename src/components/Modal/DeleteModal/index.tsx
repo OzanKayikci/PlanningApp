@@ -19,6 +19,8 @@ import { ProjectService } from "../../../services/Concrete/ProjectService";
 import { setSelectedProject } from "../../../redux/state/selectedProjectSlice";
 import { IProject } from "../../../interfaces/IProject";
 import { IList } from "../../../interfaces/IList";
+import { ITaskService } from "../../../services/Abstract/ITaskService";
+import { TaskService } from "../../../services/Concrete/TaskService";
 
 //TODO:  handle klasörü oluştur. delete işlemlerini orada yap
 const deleteHandle = (
@@ -36,7 +38,12 @@ const deleteHandle = (
         console.log("list silindi", res);
         dispatch(deleteModalState());
         dispatch(setButtonAction([false, ""]));
+        const taskService: ITaskService = new TaskService();
+        taskService.deleteByListId(id).then((res) => {
+          console.log("bu lşisteye ait tasklar silindi", res);
+        });
       });
+
       break;
     case types.project:
       dispatch(deleteProjectById(id));
@@ -48,11 +55,18 @@ const deleteHandle = (
 
         dispatch(deleteModalState());
         dispatch(setButtonAction([false, ""]));
-      const listService: IListService = new ListService();
-      listService.deleteByGroupId(nextSelectedProject.id).then((res) => {
-        console.log("bu projeye ait listeler silindi", res);
-      })
+        const listService: IListService = new ListService();
+        listService.deleteByGroupId(nextSelectedProject.id).then((res) => {
+          console.log("bu projeye ait listeler silindi", res);
+        });
+        const taskService: ITaskService = new TaskService();
+        taskService.deleteByGroupId(id).then((res) => {
+          console.log("bu projeye ait tasklar silindi", res);
+        });
       });
+      break;
+    default:
+      break;
   }
 };
 

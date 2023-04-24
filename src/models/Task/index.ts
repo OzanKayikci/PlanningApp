@@ -5,7 +5,7 @@ import { BaseBuilder } from "../baseAbstracts/BaseBuilder";
 import { TaskBuilder } from "./taskBuilder";
 
 export default class Task extends Base implements ITask {
-  private _hasDate: boolean;
+  private _hasDate: boolean = false;
   private _startDate?: number;
   private _endDate?: number;
   private _listId: number;
@@ -53,5 +53,28 @@ export default class Task extends Base implements ITask {
   }
   get text(): string {
     return this._text;
+  }
+
+  public get getAllItems(): ITask {
+    const newTask = {
+      id: this.id,
+      type: this.type,
+      title: this.title,
+      IsParent: this.IsParent,
+      isChild: this.isChild,
+      parentId: this.parentId,
+      groupId: this.groupId,
+      color: this.color,
+      colorShape: this.colorShape,
+      text: this.text,
+      startdate: this.startDate,
+      enddate: this.endDate,
+      priority: this.priority,
+      listId: this.listId,
+      parentType: this.parentType,
+      isCompleted: this.isCompleted,
+      hasDate: this.hasDate,
+    };
+    return newTask;
   }
 }

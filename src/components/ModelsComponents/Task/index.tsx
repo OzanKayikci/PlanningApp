@@ -19,13 +19,28 @@ const TaskView: FC<ITaskViewProps> = ({ Task }) => {
     <TouchableOpacity
       style={{
         borderRadius: 10,
-        
+
         marginBottom: 20,
       }}
     >
-      <View style={[styles.taskContainer, { backgroundColor: Task.color, width: taskWidth, alignSelf:"flex-end" }]}>
+      <View
+        style={[
+          styles.taskContainer,
+          { backgroundColor: Task.color, width: taskWidth, alignSelf: "flex-end" },
+        ]}
+      >
         <View style={styles.taskHeader}>
-          <Text style={[{position:"absolute",right:"108%",fontSize:25, top:-10,color:LightColors.secondary},{transform: [{rotateZ: '90deg'}],}]}>{"⤴"}</Text>
+          {Task.parentType === ParentTypes.task ? (
+            <Text
+              style={[
+                { position: "absolute", right: "108%", fontSize: 25, top: -10, color: LightColors.secondary },
+                { transform: [{ rotateZ: "90deg" }] },
+              ]}
+            >
+              {"⤴"}
+            </Text>
+          ) : null}
+
           <View style={styles.title}>
             <Text style={styles.headerText}>{Task.title.toUpperCase()}</Text>
           </View>

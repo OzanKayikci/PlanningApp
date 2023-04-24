@@ -11,6 +11,10 @@ import { addModalState } from "../../../redux/state/modalSlice";
 import { ModalTypes, types } from "../../../constants/types";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { LightColors } from "../../../constants/Colors";
+import { ITaskService } from "../../../services/Abstract/ITaskService";
+import { TaskService } from "../../../services/Concrete/TaskService";
+import { IList } from "../../../interfaces/IList";
+import { getProjectTasks } from "../../../redux/state/taskSlice";
 
 interface IPorjectViewProps {
   Project: Project;
@@ -21,17 +25,25 @@ const deleteHandle = (id: IProject["id"], title: IProject["title"], dispatch: an
   dispatch(addModalState([ModalTypes.deleteModal, id, title, types.project]));
 };
 
+const selectHandle = (Project:IProject, listsSelector:IList[],dispatch:any)=>{
+  dispatch(setSelectedProject(Project));
+  dispatch(getProjectLists([listsSelector, Project.id]));
+  const taskService: ITaskService = new TaskService();
+  taskService.getByGroupId(Project.id).then((res) => {
+    dispatch(getProjectTasks(res));
+  })
+}
 const ProjectView: FC<IPorjectViewProps> = ({ Project, props }) => {
   const projectsSelector = useAppSelector(selectProjects);
   const listsSelector = useAppSelector(selectAlllists);
   const dispatch = useAppDispatch();
+
   return (
     <TouchableOpacity
       style={[styles.homeButton, { backgroundColor: Project.color }]}
       onPress={() => {
-        dispatch(setSelectedProject(Project));
-        dispatch(getProjectLists([listsSelector, Project.id]));
-        props.prop.navigation.navigate("Home");
+        selectHandle(Project, listsSelector, dispatch);
+        props.navigate("Home");
       }}
     >
       <View style={styles.buttonView}>

@@ -1,47 +1,40 @@
-import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-import { Text, TouchableOpacity, View } from "react-native";
-import { LightColors } from "../../constants/Colors";
-import { styles } from "./Drawernavigatin.styles";
-import Project from "../ModelsComponents/Project";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { addModalState } from "../../redux/state/modalSlice";
-import { ModalTypes } from "../../constants/types";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
+import { useEffect, useState } from "react";
 import { IProject } from "../../interfaces/IProject";
 import { selectProjects } from "../../redux/state/projectSlice";
-import { useEffect, useState } from "react";
-import { FlatList } from "react-native-gesture-handler";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import ProjectView from "../ModelsComponents/Project";
+import { styles } from "./projecstList.styles";
+import { addModalState } from "../../redux/state/modalSlice";
+import { ModalTypes } from "../../constants/types";
+import { LightColors } from "../../constants/Colors";
 
 const handleOpen = (dispatch: any) => {
   dispatch(addModalState([ModalTypes.projectCreate]));
 };
 
-const DrawerComponent = (props: any) => {
+const Projects = ({props}) => {
   const [projects, setProjects] = useState<IProject[]>(useAppSelector(selectProjects));
   const allProjects = useAppSelector(selectProjects);
   const dispatch = useAppDispatch();
   useEffect(() => {
     setProjects(allProjects);
-
   }, [allProjects]);
   const childComponent = ({ item, index }: any) => {
-    return <ProjectView key={item.id} Project={item} props={props.prop.navigation}></ProjectView>;
+    return <ProjectView key={item.id} Project={item} props={props} />;
   };
   return (
     <View style={styles.continer}>
       <View style={styles.middleView}>
-        <View style={styles.header}>
-          <Text style={styles.headerText}> PROJECTS</Text>
-        </View>
-      
-          <FlatList
-            data={projects}
-            renderItem={childComponent}
-            keyExtractor={(item, index) => index.toString()}
-            style={styles.list}
-          />
-      
+        <View style={styles.header}>{<Text style={styles.headerText}> PROJECTS</Text>}</View>
+
+        <FlatList
+          data={projects}
+          renderItem={childComponent}
+          keyExtractor={(item, index) => index.toString()}
+          style={styles.list}
+        />
       </View>
 
       <View style={styles.bottomView}>
@@ -61,4 +54,4 @@ const DrawerComponent = (props: any) => {
   );
 };
 
-export default DrawerComponent;
+export default Projects;

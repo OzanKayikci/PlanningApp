@@ -16,10 +16,10 @@ import { Zocial } from "@expo/vector-icons";
 import CreateListButton from "../../components/Buttons/createListButton";
 import ModalView from "../../components/Modal/ModalView";
 import CloseButton from "../../components/Buttons/closeButton";
-import { useAppSelector } from "../../redux/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
 import { selectlists } from "../../redux/state/listSlice";
 import ListsGridView from "../../components/Lists";
-import { selectModalState } from "../../redux/state/modalSlice";
+import { addModalState, selectModalState } from "../../redux/state/modalSlice";
 import { LightColors } from "../../constants/Colors";
 import DraverButton from "../../components/drawerComponent.tsx/DrawerNavigationButton";
 import { IProjectService } from "../../services/Abstract/IProjectService";
@@ -27,15 +27,23 @@ import { ProjectService } from "../../services/Concrete/ProjectService";
 import { selectSelectedProject } from "../../redux/state/selectedProjectSlice";
 import { IListService } from "../../services/Abstract/IListService";
 import { ListService } from "../../services/Concrete/ListService";
+import { ModalTypes, types } from "../../constants/types";
+import Projects from "../../components/projectsList";
 
 const { height, width } = Dimensions.get("window");
 
 const Header = (props: any) => {
   const selectedProject = useAppSelector(selectSelectedProject);
+  const dispatch = useAppDispatch();
   return (
     <View style={styles.headerContainer}>
       <DraverButton navigation={props.navigation} />
-      <View style={styles.header}>
+      <TouchableOpacity
+        onPress={() => {
+          dispatch(addModalState([ModalTypes.projectDetail, selectedProject.id, selectedProject.title,types.project]));
+        }}
+        style={styles.header}
+      >
         <View style={styles.headerIcon}>
           <Zocial
             name="pinboard"
@@ -49,7 +57,7 @@ const Header = (props: any) => {
           />
         </View>
         <Text style={styles.headerText}>{selectedProject.title}</Text>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -57,6 +65,7 @@ const HomeScreen = ({ navigation }) => {
   const [openModal, setOpenModal] = useState<boolean>(useAppSelector(selectModalState));
   const modalState = useAppSelector(selectModalState);
 
+  const selectedProject = useAppSelector(selectSelectedProject);
   //! delete for all lists
   // const listService: IListService = new ListService();
   // listService.deleteAll();
@@ -69,17 +78,23 @@ const HomeScreen = ({ navigation }) => {
 
   console.log("modalState", openModal);
   return (
-    <View style={styles.container}>
-      <Header navigation={navigation} />
-
-      <ZoomView>
-        <View style={{ flexDirection: "row" }}>
-          <ListsGridView />
+    <View>
+      {selectedProject === null ? (
+        <View style={styles.container}>
+          <Projects props={navigation} />
         </View>
-
-        {/* //? create Button */}
-      </ZoomView>
-      <CreateListButton />
+      ) : (
+        <View style={styles.container}>
+          <Header navigation={navigation} />
+          <ZoomView>
+            <View style={{ flexDirection: "row" }}>
+              <ListsGridView />
+            </View>
+          </ZoomView>
+          {/* //? create Button */}
+          <CreateListButton />
+        </View>
+      )}
 
       <ModalView>
         <CloseButton />

@@ -4,7 +4,6 @@ import Task from "../../models/Task";
 import { RootState } from "../store/store";
 import { ITask } from "../../interfaces/ITask";
 
-
 // const GetTask1 = () => {
 //     const text =
 //       "Personal Mangata uygulamasını bitir. Personal Mangata uygulamasını bitir. Personal Mangata uygulamasını bitir. Personal Mangata uygulamasını bitir";
@@ -43,6 +42,9 @@ const taskSlice = createSlice({
         existingTask = action.payload;
       }
     },
+    getProjectTasks: (state, action: PayloadAction<ITask[]>) => {
+      state.tasks = action.payload;
+    },
     toggleTaskCompletedById: (state, action: PayloadAction<ITask["id"]>) => {
       const existingTodo = state.tasks.find((task) => task.id === action.payload);
       if (existingTodo) {
@@ -52,6 +54,7 @@ const taskSlice = createSlice({
   },
 });
 
-export const selectTasks = (state:RootState) => state.tasksReducer.tasks;
-export const { addTask, deleteTaskById, toggleTaskCompletedById, updateTaskById } = taskSlice.actions;
+export const selectTasks = (state: RootState) => state.tasksReducer.tasks;
+export const { addTask, deleteTaskById, getProjectTasks, toggleTaskCompletedById, updateTaskById } =
+  taskSlice.actions;
 export default taskSlice.reducer;

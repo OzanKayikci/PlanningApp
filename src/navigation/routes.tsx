@@ -18,6 +18,9 @@ import { IProjectService } from "../services/Abstract/IProjectService";
 import { ProjectService } from "../services/Concrete/ProjectService";
 import { getAllProjects } from "../redux/state/projectSlice";
 import { setSelectedProject } from "../redux/state/selectedProjectSlice";
+import { TaskService } from "../services/Concrete/TaskService";
+import { ITaskService } from "../services/Abstract/ITaskService";
+import { getProjectTasks } from "../redux/state/taskSlice";
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 const { width, height } = Dimensions.get("window");
@@ -33,12 +36,16 @@ const AppNavigation = () => {
     projectService.getAll().then((projectRes) => {
       
       dispatch(getAllProjects(projectRes));
-      dispatch(setSelectedProject(projectRes[0]))
+      dispatch(setSelectedProject(null))
       listService.getAll().then((res) => {
         dispatch(getAllLists(res));
 
         dispatch(getProjectLists([res,projectRes[0].id]));
       });
+      const taskService: ITaskService = new TaskService();
+      taskService.getByGroupId(projectRes[0].id).then((res) => {
+        dispatch(getProjectTasks(res));
+      })
     });
   }, []);
 

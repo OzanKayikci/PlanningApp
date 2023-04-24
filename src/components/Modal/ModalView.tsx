@@ -14,17 +14,16 @@ import {
 import { BlurView } from "expo-blur";
 import { LightColors, listColors } from "../../constants/Colors";
 import { ModalTypes } from "../../constants/types";
-import {
-  CreateParentModalBody,
-  CreateParentModalFooter,
-  CreateParentModalHeader,
-} from "./CreateModals/createParentItemModal";
+import { CreateParentModalBody, CreateParentModalHeader } from "./CreateModals/createParentItemModal";
 
 import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
 import { selectButtonAction } from "../../redux/state/buttonActionSlice";
 import { deleteModalState, selectModalState, selectModalType } from "../../redux/state/modalSlice";
 import { DeleteModalBody, DeleteModalHeader } from "./DeleteModal";
 import DeleteButton from "../Buttons/deleteButton";
+import { CreateTaskModalBody, CreateTaskModalHeader } from "./CreateModals/cretateTaskModal";
+import { DeleteItemButton } from "../Buttons/deleteItemButton";
+import { ModalFooter } from "./ModalFooter";
 
 const { height, width } = Dimensions.get("window");
 
@@ -49,11 +48,12 @@ const ModalView = ({ children }) => {
   let body: ReactNode;
   let footer: ReactNode;
   let modalStyle = styles;
+
   switch (modalType) {
     case ModalTypes.listCreate:
       header = <CreateParentModalHeader />;
       body = <CreateParentModalBody />;
-      footer = <CreateParentModalFooter />;
+      footer = <ModalFooter />;
 
       modalStyle.modalView.height = "95%";
       modalStyle.body.flex = 10;
@@ -69,16 +69,38 @@ const ModalView = ({ children }) => {
     case ModalTypes.listDetail:
       header = <CreateParentModalHeader title="UPDATE LIST" />;
       body = <CreateParentModalBody />;
-      footer = <CreateParentModalFooter />;
+      footer = <ModalFooter deleteButton={<DeleteItemButton />} />;
       modalStyle.modalView.height = "95%";
       modalStyle.body.flex = 10;
       break;
     case ModalTypes.projectCreate:
       header = <CreateParentModalHeader title="NEW PROJECT" />;
       body = <CreateParentModalBody />;
-      footer = <CreateParentModalFooter />;
+      footer = <ModalFooter />;
       modalStyle.modalView.height = "95%";
       modalStyle.body.flex = 10;
+      break;
+    case ModalTypes.projectDetail:
+      header = <CreateParentModalHeader title="UPDATE PROJECT" />;
+      body = <CreateParentModalBody />;
+      footer = <ModalFooter deleteButton={<DeleteItemButton />} />;
+      modalStyle.modalView.height = "95%";
+      modalStyle.body.flex = 10;
+      break;
+    case ModalTypes.taskCreate:
+      header = <CreateTaskModalHeader title="NEW TASK" />;
+      body = <CreateTaskModalBody />;
+      footer = <ModalFooter />;
+      modalStyle.modalView.height = "95%";
+      modalStyle.body.flex = 10;
+      break;
+    case ModalTypes.taskDetail:
+      header = <CreateTaskModalHeader title="UPDATE TASK" />;
+      body = <CreateTaskModalBody />;
+      footer = <ModalFooter deleteButton={<DeleteItemButton />} />;
+      modalStyle.modalView.height = "95%";
+      modalStyle.body.flex = 10;
+      break;
     default:
       break;
   }

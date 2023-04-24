@@ -22,7 +22,9 @@ export class ListService implements IListService {
     const lists = await this.getAll().then((data) => {
       return data;
     });
-    const netId: number = lists !== null ? lists[lists.length - 1].id + 1 : 100;
+
+    const netId: number = lists.length > 0 || lists !== null ? lists[lists.length - 1].id + 1 : 100;
+ ;
     let newList: List = new ListBuilder(netId, types.list, title, color, shape)
       .SetParentId(0)
       .setGroupId(groupId)
