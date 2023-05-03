@@ -1,12 +1,17 @@
-
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 import { IBase } from "../../interfaces/IBase";
 import { RootState } from "../store/store";
-import { ModalTypes } from "../../constants/types";
+import { ModalTypes, types } from "../../constants/types";
 
 export interface ModalState {
-  modalState: { type?: ModalTypes; isOpen: boolean; elementId?: IBase["id"]; title:IBase["title"] };
+  modalState: {
+    type?: ModalTypes;
+    isOpen: boolean;
+    elementId?: IBase["id"];
+    title: IBase["title"];
+    elementType?: types;
+  };
 }
 
 const initialState: ModalState = {
@@ -15,6 +20,7 @@ const initialState: ModalState = {
     isOpen: false,
     elementId: null,
     title: "",
+    elementType:null,
   },
 };
 
@@ -24,12 +30,13 @@ const modalSlice = createSlice({
   name: "modals",
   initialState,
   reducers: {
-    addModalState: (state, action: PayloadAction<[ModalTypes,IBase["id"]?,IBase["title"]?]>) => {
+    addModalState: (state, action: PayloadAction<[ModalTypes, IBase["id"]?, IBase["title"]?,types?] >) => {
       state.modalState = {
         type: action.payload[0],
         isOpen: true,
-        elementId:action.payload[1],
-        title:action.payload[2],
+        elementId: action.payload[1],
+        title: action.payload[2],
+        elementType:action.payload[3],
       };
     },
 
@@ -39,6 +46,7 @@ const modalSlice = createSlice({
         isOpen: false,
         elementId: null,
         title: "",
+        elementType:null
       };
     },
   },

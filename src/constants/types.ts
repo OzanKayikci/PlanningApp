@@ -11,6 +11,7 @@ export enum types{
     "list",
     "task",
     "parentTask",
+    "project",
 }
 
 export enum priorities {
@@ -20,8 +21,8 @@ export enum priorities {
 }
 export enum ParentTypes{
     task="task",
-    list="list"
-
+    list="list",
+    project = "project",
 }
 
 export enum ModalTypes{
@@ -29,7 +30,11 @@ export enum ModalTypes{
     "listCreate",
     "listDetail",
     "taskDetail",
-    "projecDetail",
+    "projectDetail",
+    "projectCreate",
     "deleteModal",
 
 }
+
+
+/*//? id <100 ==> PROJECT |  id>=100<200 ==> list | id >=200 ==> task   */

@@ -1,8 +1,11 @@
-import React, { ComponentType, useCallback, useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import React, { ComponentType, useCallback, useEffect, useState } from "react";
+import { View, Text, TouchableOpacity,Dimensions, ScrollView } from "react-native";
+
 import { styles } from "./dropDown.styles";
 import { FlatList } from "react-native-gesture-handler";
 import { listColors } from "../../constants/Colors";
+
+const { width,height } = Dimensions.get("window");
 
 interface DropdownProps {
   options: string[];
@@ -11,19 +14,25 @@ interface DropdownProps {
   headerColor?: string;
   itemColor?: string;
   type: string;
-  action:React.Dispatch<React.SetStateAction<string>>,
+  value: string;
+  isopen: React.Dispatch<React.SetStateAction<string>>;
+
+  action: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const Dropdown: React.FC<DropdownProps > = ({
+const Dropdown: React.FC<DropdownProps> = ({
   options,
   SecondElement,
   backgroundColor,
   headerColor,
   itemColor,
   type,
-  action
+  value = "",
+  isopen,
+
+  action,
 }) => {
-  const [selectedOption, setSelectedOption] = useState<string>("");
+  const [selectedOption, setSelectedOption] = useState<string>(value);
   const [showOptions, setShowOptions] = useState(false);
 
   const handleSelect = (option: string) => {
@@ -31,7 +40,12 @@ const Dropdown: React.FC<DropdownProps > = ({
     action(option);
 
     setShowOptions(false);
+    isopen(!showOptions ? type:"")
   };
+
+  useEffect(() => {
+    setSelectedOption(value);
+  }, [value]);
 
   //?flatList Item
   const Item = ({ item }: any) => {
@@ -44,21 +58,19 @@ const Dropdown: React.FC<DropdownProps > = ({
           ]}
         >
           <Text style={styles.item}>{item}</Text>
-          {SecondElement && <SecondElement item={item}/>}
+          {SecondElement && <SecondElement item={item} />}
         </View>
       </TouchableOpacity>
     );
   };
-
-
   return (
-    <View style={[styles.dropdownContainer]}>
+    <View style={[styles.dropdownContainer,{height:showOptions ? "100%":height, position:"absolute", width:"100%",top:25}]}>
       <TouchableOpacity
         style={[
           styles.dropdownHeader,
           { backgroundColor: headerColor ? headerColor : styles.dropdownHeader.backgroundColor },
         ]}
-        onPress={() => setShowOptions(!showOptions)}
+        onPress={() =>{setShowOptions(!showOptions),isopen(!showOptions ? type:"")}}
       >
         <Text style={styles.header}>{selectedOption ? selectedOption : `Select a ${type}`}</Text>
       </TouchableOpacity>
@@ -79,7 +91,7 @@ const Dropdown: React.FC<DropdownProps > = ({
               renderItem={Item}
               scrollEnabled
               keyExtractor={(item, index) => index.toString()}
-         
+              nestedScrollEnabled={true}
             />
           </View>
         </View>

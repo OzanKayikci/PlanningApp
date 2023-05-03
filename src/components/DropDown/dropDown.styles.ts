@@ -2,36 +2,33 @@ import { StyleSheet } from "react-native";
 import { LightColors } from "../../constants/Colors";
 
 export const styles = StyleSheet.create({
-  dropdownContainer: {},
+  dropdownContainer: { },
   dropdownHeader: {
     borderWidth: 1,
     borderColor: "#ccc",
     padding: 10,
     backgroundColor: "#fff",
     borderRadius: 15,
-    
   },
-  header:{
-    color:LightColors.secondary,
-    fontFamily:"Poppins-Medium",
-
+  header: {
+    color: LightColors.secondary,
+    fontFamily: "Poppins-Medium",
   },
   dropdownOptionsContainer: {
-    //position: "absolute",
-    //top: "120%",
+    position: "absolute",
+    top: "11%",
     width: "100%",
     borderWidth: 2,
     borderRadius: 15,
     borderColor: "#ccc",
     backgroundColor: "#fff",
     padding: 10,
-maxHeight:150
-    
+    maxHeight: 150,
   },
   dropdownOptions: {
-    height:"100%",
-    flexGrow:1,
-
+    height: "100%",
+    flexGrow: 1,
+    zIndex: 100,
   },
   itemButton: {
     margin: 2,
@@ -47,8 +44,7 @@ maxHeight:150
     paddingVertical: 5,
     paddingHorizontal: 10,
   },
-  item:{
-    fontFamily:"Poppins-Italic",
-
-  }
+  item: {
+    fontFamily: "Poppins-Italic",
+  },
 });

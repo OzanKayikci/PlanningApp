@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { View, Text, Dimensions, Platform, StyleSheet } from "react-native";
-
+import * as NavigationBar from 'expo-navigation-bar';
 import AppNavigation from "./navigation/routes";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -12,6 +12,7 @@ const { width, height } = Dimensions.get("window");
 import { StatusBar } from 'expo-status-bar';
 import { LightColors } from "./constants/Colors";
 const App = () => {
+  NavigationBar.setBackgroundColorAsync(LightColors.darkBackground);
   return (
     <Provider store={store}>
       <SafeAreaView style={styles.droidSafeArea}>
@@ -19,7 +20,7 @@ const App = () => {
           <AppNavigation />
         </GestureHandlerRootView>
       </SafeAreaView>
-      <StatusBar style="light" backgroundColor={LightColors.secondary}/>
+      <StatusBar style="light" backgroundColor={LightColors.darkBackground}/>
     </Provider>
   );
 };

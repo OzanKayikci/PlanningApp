@@ -4,7 +4,6 @@ import Task from "../../models/Task";
 import { RootState } from "../store/store";
 import { ITask } from "../../interfaces/ITask";
 
-
 // const GetTask1 = () => {
 //     const text =
 //       "Personal Mangata uygulamasını bitir. Personal Mangata uygulamasını bitir. Personal Mangata uygulamasını bitir. Personal Mangata uygulamasını bitir";
@@ -31,17 +30,27 @@ const taskSlice = createSlice({
   initialState,
   reducers: {
     addTask: (state, action: PayloadAction<ITask>) => {
-      state.tasks = [...state.tasks, action.payload];
+      console.log("taskslice", action.payload);
+
+      state.tasks = state.tasks !== null ? [...state.tasks, action.payload] : [action.payload];
+      console.log("taskslice after", state.tasks);
     },
     deleteTaskById: (state, action: PayloadAction<ITask["id"]>) => {
-      state.tasks = state.tasks.filter((task) => task.id === action.payload);
+      state.tasks = state.tasks.filter((task) => task.id !== action.payload);
     },
 
     updateTaskById: (state, action: PayloadAction<ITask>) => {
-      let existingTask = state.tasks.find((task) => task.id === action.payload.id);
-      if (existingTask) {
-        existingTask = action.payload;
-      }
+      const updatedTasks = state.tasks.map((task) => {
+        if (task.id === action.payload.id) {
+          return action.payload;
+        }
+        return task;
+      });
+      state.tasks = updatedTasks;
+    },
+    getProjectTasks: (state, action: PayloadAction<ITask[]>) => {
+      console.log("getProjectTasks", action.payload);
+      state.tasks = action.payload;
     },
     toggleTaskCompletedById: (state, action: PayloadAction<ITask["id"]>) => {
       const existingTodo = state.tasks.find((task) => task.id === action.payload);
@@ -52,6 +61,7 @@ const taskSlice = createSlice({
   },
 });
 
-export const selectTasks = (state:RootState) => state.tasksReducer.tasks;
-export const { addTask, deleteTaskById, toggleTaskCompletedById, updateTaskById } = taskSlice.actions;
+export const selectTasks = (state: RootState) => state.tasksReducer.tasks;
+export const { addTask, deleteTaskById, getProjectTasks, toggleTaskCompletedById, updateTaskById } =
+  taskSlice.actions;
 export default taskSlice.reducer;

@@ -27,7 +27,6 @@ const buttonSlice = createSlice({
   initialState,
   reducers: {
     setButtonAction: (state, action: PayloadAction<[boolean,typeof state.type]>) => {
-      console.log("insideslice", action.payload)
       state.action = action.payload[0];
       state.type =action.payload[1];
     },

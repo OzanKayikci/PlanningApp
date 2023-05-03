@@ -1,4 +1,5 @@
 import { types } from "../../constants/types";
+import { IBase } from "../../interfaces/IBase";
 import { IList } from "../../interfaces/IList";
 import List from "../../models/List";
 import { ListBuilder } from "../../models/List/listBuilder";
@@ -6,7 +7,7 @@ import { useAppDispatch } from "../../redux/hooks/hooks";
 import { deletelistById } from "../../redux/state/listSlice";
 //import { addlist } from "../../redux/state/listSlice";
 import { IListService } from "../Abstract/IListService";
-import { deleteData, deleteStorage, getData, storeData } from "../StoringService";
+import { deleteData, deleteStorage, getData, storeData, updateData } from "../StoringService";
 
 export class ListService implements IListService {
   private lists: IList[] = [];
@@ -15,15 +16,17 @@ export class ListService implements IListService {
   public async create(
     title: IList["title"],
     color: IList["color"],
-    shape: IList["colorShape"]
+    shape: IList["colorShape"],
+    groupId: IList["groupId"]
   ): Promise<IList | null> {
     const lists = await this.getAll().then((data) => {
-      return data;
+      return data !== null ? data : [];
     });
-    const netId: number = lists !== null ? lists[lists.length - 1].id + 1 : 100;
+
+    const netId: number = lists.length > 0 ? lists[lists.length - 1].id + 1 : 100;
     let newList: List = new ListBuilder(netId, types.list, title, color, shape)
       .SetParentId(0)
-      .setGroupId(0)
+      .setGroupId(groupId)
       .setChildren([])
       .setChildGroupId(0)
       .setIsParent(true)
@@ -47,24 +50,30 @@ export class ListService implements IListService {
     });
   }
 
-  public async update(list: IList): Promise<string> {
-    const dispatch = useAppDispatch();
+  public async update(list: List): Promise<string> {
+    return await this.getById(list.id).then(async (data) => {
+      data = list.getAllItems;
+      console.log("update", data);
 
-    // this.getById(list.id).then((data) => {
-    //   data = list;
-    //   storeData(data, "lists").then((value) => {
-    //     value && data ? dispatch(addlist(data)) : null;
-    //     return "success";
-    //   });
-    // });
-    return "fail";
-  }
-  public async delete(id: number): Promise<string> {
-   return await this.getById(id).then(async (data) => {
-     return await deleteData(data, "lists")
+      return await updateData(data, "lists");
     });
   }
-
+  public async delete(id: IBase["id"]): Promise<string> {
+    return await this.getById(id).then(async (data) => {
+      return await deleteData(data, "lists");
+    });
+  }
+  public async deleteByGroupId(groupId: number): Promise<string> {
+    await this.getAll().then(async (data) => {
+      data.map(async (list) => {
+        if (list.groupId === groupId) {
+          await this.delete(list.id);
+        }
+      });
+      return "success";
+    });
+    return "fail";
+  }
   public async deleteAll(): Promise<string> {
     const result = await deleteStorage("lists");
     console.log("res", result);

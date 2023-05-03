@@ -4,23 +4,25 @@ import { StyleSheet, View, Dimensions, TouchableOpacity } from "react-native";
 
 import { LightColors, listColors } from "../../constants/Colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useAppDispatch } from "../../redux/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
 import { addModalState, deleteModalState } from "../../redux/state/modalSlice";
 import { ModalTypes } from "../../constants/types";
+import { selectProjects } from "../../redux/state/projectSlice";
 const { width, height } = Dimensions.get("window");
 
-const handleOpen = (dispatch: any) => {
-  dispatch(addModalState([ModalTypes.listCreate]));
+const handleOpen = (dispatch: any, projectsCount: any) => {
+  dispatch(addModalState([projectsCount > 0 ? ModalTypes.listCreate : ModalTypes.projectCreate]));
 };
 
 const CreateListButton = () => {
   const dispatch = useAppDispatch();
+  const projectsSelector = useAppSelector(selectProjects);
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
         onPress={() => {
-          handleOpen(dispatch);
+          handleOpen(dispatch, projectsSelector.length);
         }}
       >
         <View style={styles.buttonContainer}>

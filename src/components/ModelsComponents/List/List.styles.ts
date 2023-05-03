@@ -26,11 +26,14 @@ export const styles = StyleSheet.create({
 
     marginBottom: 20,
   },
+  headerButton:{
+    flex: 10,
+  },
   headerText: {
     fontFamily: "Poppins-SemiBoldItalic",
     fontSize: 20,
     textAlign: "center",
-    flex: 10,
+    flex: 1,
 
   },
   buttonContainer: {
