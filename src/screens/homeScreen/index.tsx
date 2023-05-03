@@ -21,7 +21,7 @@ import { selectlists } from "../../redux/state/listSlice";
 import ListsGridView from "../../components/Lists";
 import { addModalState, selectModalState } from "../../redux/state/modalSlice";
 import { LightColors } from "../../constants/Colors";
-import DraverButton from "../../components/drawerComponent.tsx/DrawerNavigationButton";
+import DraverButton from "../../components/drawerComponent/DrawerNavigationButton";
 import { IProjectService } from "../../services/Abstract/IProjectService";
 import { ProjectService } from "../../services/Concrete/ProjectService";
 import { selectSelectedProject } from "../../redux/state/selectedProjectSlice";
@@ -29,6 +29,7 @@ import { IListService } from "../../services/Abstract/IListService";
 import { ListService } from "../../services/Concrete/ListService";
 import { ModalTypes, types } from "../../constants/types";
 import Projects from "../../components/projectsList";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const { height, width } = Dimensions.get("window");
 
@@ -40,7 +41,14 @@ const Header = (props: any) => {
       <DraverButton navigation={props.navigation} />
       <TouchableOpacity
         onPress={() => {
-          dispatch(addModalState([ModalTypes.projectDetail, selectedProject.id, selectedProject.title,types.project]));
+          dispatch(
+            addModalState([
+              ModalTypes.projectDetail,
+              selectedProject.id,
+              selectedProject.title,
+              types.project,
+            ])
+          );
         }}
         style={styles.header}
       >
@@ -61,6 +69,10 @@ const Header = (props: any) => {
     </View>
   );
 };
+
+const clearAllStorage = async () => {
+  await AsyncStorage.clear();
+};
 const HomeScreen = ({ navigation }) => {
   const [openModal, setOpenModal] = useState<boolean>(useAppSelector(selectModalState));
   const modalState = useAppSelector(selectModalState);
@@ -70,7 +82,8 @@ const HomeScreen = ({ navigation }) => {
   // const listService: IListService = new ListService();
   // listService.deleteAll();
   //  const projectService: IProjectService = new ProjectService();
-  //  projectService.deleteAll();
+  //  projectService.deleteAll();,
+  //clearAllStorage();
 
   useEffect(() => {
     setOpenModal(modalState);
@@ -105,68 +118,3 @@ const HomeScreen = ({ navigation }) => {
 };
 
 export default HomeScreen;
-
-// const GetList = () => {
-//   const allLists = useAppSelector(selectlists);
-//   console.log("allLists", allLists);
-//   let list: IList = allLists[0];
-//   return <ListView List={list}></ListView>;
-// };
-
-// const GetList2 = () => {
-//   let list: IList = new ListBuilder(1, types.list, "DOING", listColors[15], shapes[1])
-//     .setChildGroupId(2)
-//     .setChildren([GetTask1(), GetTask2(), GetTask3()])
-//     .setIsChild(false)
-//     .listBuild();
-
-//   let lists: IList[] = [];
-//   lists.push(list);
-//   console.log("lililisst", lists);
-//   return lists;
-// };
-
-// const GetTask1 = () => {
-//   const text =
-//     "Personal Mangata uygulamasını bitir. Personal Mangata uygulamasını bitir. Personal Mangata uygulamasını bitir. Personal Mangata uygulamasını bitir";
-//   const title = "mangata bitir";
-//   let task: ITask = new TaskBuilder(1, types.task, title, text, listColors[10], shapes[1], 2)
-//     .SetParentId(1)
-//     .setPriority(priorities.low)
-//     .taskBuild();
-//   return <TaskView Task={task}></TaskView>;
-// };
-// const GetTask2 = () => {
-//   const text =
-//     "Personal Mangata tasarımını yap. Personal Mangata tasarımını yap. Personal Mangata tasarımını yap";
-//   const title = "Personal Mangata Tasarım";
-//   let task: ITask = new TaskBuilder(1, types.task, title, text, listColors[12], shapes[2], 2)
-//     .SetParentId(1)
-//     .setPriority(priorities.high)
-//     .setParentType(ParentTypes.task)
-//     .taskBuild();
-//   return <TaskView Task={task}></TaskView>;
-// };
-// const GetTask3 = () => {
-//   const childtext = "Child Obje Child Obje";
-//   const childtitle = "Child Title";
-//   let childtask: ITask = new TaskBuilder(1, types.task, childtitle, childtext, listColors[12], shapes[2], 2)
-//     .SetParentId(6)
-//     .setPriority(priorities.high)
-//     .setParentType(ParentTypes.task)
-//     .taskBuild();
-
-//   const text =
-//     "Personal Mangata' da build pattern i öğren. Personal Mangata' da build pattern i öğren. Personal Mangata' da build pattern i öğren.";
-//   const title = " Mangata Build (Parent)";
-//   let task: ITask = new TaskBuilder(6, types.task, title, text, listColors[6], shapes[2], 2)
-//     .SetParentId(1)
-//     .setPriority(priorities.medium)
-//     .taskBuild();
-
-//   let parentTask: IParentTask = new ParentTaskBuilder(task)
-//     .setIsParent(true)
-//     .setChildGroupId(2)
-//     .parentTaskBuild();
-//   return <ParentTaskView Task={parentTask}></ParentTaskView>;
-// };

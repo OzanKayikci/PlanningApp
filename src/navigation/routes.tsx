@@ -11,8 +11,8 @@ import { fonts } from "../constants/fonts";
 import { useAppDispatch } from "../redux/hooks/hooks";
 import { IListService } from "../services/Abstract/IListService";
 import { ListService } from "../services/Concrete/ListService";
-import { getProjectLists,getAllLists } from "../redux/state/listSlice";
-import DrawerComponent from "../components/drawerComponent.tsx";
+import { getProjectLists, getAllLists } from "../redux/state/listSlice";
+import DrawerComponent from "../components/drawerComponent";
 import { LightColors } from "../constants/Colors";
 import { IProjectService } from "../services/Abstract/IProjectService";
 import { ProjectService } from "../services/Concrete/ProjectService";
@@ -31,21 +31,22 @@ const AppNavigation = () => {
 
   useEffect(() => {
     const listService: IListService = new ListService();
-  
+
     const projectService: IProjectService = new ProjectService();
     projectService.getAll().then((projectRes) => {
-      
       dispatch(getAllProjects(projectRes));
-      dispatch(setSelectedProject(null))
+      dispatch(setSelectedProject(null));
       listService.getAll().then((res) => {
         dispatch(getAllLists(res));
 
-        dispatch(getProjectLists([res,projectRes[0].id]));
+        projectRes.length > 0 ? dispatch(getProjectLists([res, projectRes[0].id])) : null;
       });
       const taskService: ITaskService = new TaskService();
-      taskService.getByGroupId(projectRes[0].id).then((res) => {
-        dispatch(getProjectTasks(res));
-      })
+      projectRes.length > 0
+        ? taskService.getByGroupId(projectRes[0].id).then((res) => {
+            dispatch(getProjectTasks(res));
+          })
+        : null;
     });
   }, []);
 

@@ -1,6 +1,7 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import { LightColors, listColors } from "../../../../constants/Colors";
 
+const {width, height} = Dimensions.get("window");
 
 const styles = StyleSheet.create({
     container:{
@@ -21,15 +22,18 @@ const styles = StyleSheet.create({
     body:{
         //justifyContent:"center",
         alignItems:"center",
+        minHeight:height
 
     },
     bodyItem:{
         width:"90%",
         margin:10,
+        index:100
     },
     itemLabel:{
         color:LightColors.secondary,
-        fontFamily:"Poppins-SemiBold"
+        fontFamily:"Poppins-SemiBold",
+
     },
     itemInput:{
         width:"100%",
@@ -37,9 +41,10 @@ const styles = StyleSheet.create({
         paddingHorizontal:10,
         backgroundColor:"rgba(200, 210, 247,0.2)",
         //textAlign:"center",
-        borderWidth:1,
-        borderColor:LightColors.secondary,
-        borderRadius:20,
+        borderWidth: 1,
+        borderColor: "#ccc",
+        //borderColor:LightColors.secondary,
+        borderRadius:15,
         fontFamily:"Poppins-Medium",
     },
     buttonContainer: {

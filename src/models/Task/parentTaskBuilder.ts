@@ -21,7 +21,7 @@ export class ParentTaskBuilder extends TaskBuilder implements IParentTask {
     this.SetParentId(task.parentId);
     this.setGroupId(task.groupId);
     this.setParentType(task.parentType);
-    this.serIsCompleted(task.isCompleted);
+    this.setIsCompleted(task.isCompleted);
   }
   public setIsParent(IsParent: boolean): ParentTaskBuilder {
     this.IsParent = IsParent;

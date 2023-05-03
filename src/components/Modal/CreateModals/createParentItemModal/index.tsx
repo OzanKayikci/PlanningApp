@@ -147,6 +147,7 @@ export const CreateParentModalBody = () => {
 
   const [listforUpdate, setListforUpdate] = useState<IList>(null);
   const [parentforUpdate, setParentforUpdate] = useState<IParent>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState("");
 
   const saveButtonActive = useAppSelector(selectButtonAction);
   const selectedProject = useAppSelector(selectSelectedProject);
@@ -215,7 +216,7 @@ export const CreateParentModalBody = () => {
           style={styles.itemInput}
         ></TextInput>
       </View>
-      <View style={[styles.bodyItem, { zIndex: 10 }]}>
+      <View style={[styles.bodyItem, { height: isDrawerOpen === "color" ? 500 : 64 }]}>
         <Text style={styles.itemLabel}>Color</Text>
 
         <Dropdown
@@ -224,12 +225,13 @@ export const CreateParentModalBody = () => {
           SecondElement={DropDownColorElement}
           backgroundColor={LightColors.primary}
           action={setColor}
+          isopen={setIsDrawerOpen}
           type="color"
           headerColor="rgba(200, 210, 247,0.2)"
           //itemColor="rgba(200, 210, 247,0.8)"
         />
       </View>
-      <View style={styles.bodyItem}>
+      <View style={[styles.bodyItem, { height: isDrawerOpen === "shape" ? 500 : 64}]}>
         <Text style={styles.itemLabel}>Shape</Text>
         <Dropdown
           options={shapeValues}
@@ -237,6 +239,7 @@ export const CreateParentModalBody = () => {
           SecondElement={DropDownShapeElement}
           backgroundColor={LightColors.primary}
           action={setShape}
+          isopen={setIsDrawerOpen}
           type="shape"
           headerColor="rgba(200, 210, 247,0.2)"
           //itemColor="rgba(200, 210, 247,0.8)"

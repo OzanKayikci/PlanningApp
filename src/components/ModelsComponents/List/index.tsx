@@ -33,16 +33,18 @@ const getTaskOfList = (listId: IList["id"], setListTasks: any) => {
     setListTasks(tasks);
   });
 };
-
+7
 const ListView: FC<IListViewProps> = ({ List }) => {
   const [listTasks, setListTasks] = useState<ITask[]>([]);
   const dispatch = useAppDispatch();
   const projectTask = useAppSelector(selectTasks);
-console.log("tatat",listTasks)
   useEffect(() => {
-    //?? project task null değilse mapping işlemi yap
-    projectTask && getTaskOfList(List.id, setListTasks);
+    //?? project task null değilse  işlemi yap
+    projectTask && setListTasks(projectTask.filter((task) => task.listId === List.id));
   }, []);
+  useEffect(() => {
+    projectTask && setListTasks(projectTask.filter((task) => task.listId === List.id));
+  }, [projectTask]);
 
   return (
     <View style={[styles.listContainer, { backgroundColor: List.color }]}>

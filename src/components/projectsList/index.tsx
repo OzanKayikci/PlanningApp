@@ -14,7 +14,7 @@ const handleOpen = (dispatch: any) => {
   dispatch(addModalState([ModalTypes.projectCreate]));
 };
 
-const Projects = ({props}) => {
+const Projects = ({ props }) => {
   const [projects, setProjects] = useState<IProject[]>(useAppSelector(selectProjects));
   const allProjects = useAppSelector(selectProjects);
   const dispatch = useAppDispatch();
@@ -22,7 +22,7 @@ const Projects = ({props}) => {
     setProjects(allProjects);
   }, [allProjects]);
   const childComponent = ({ item, index }: any) => {
-    return <ProjectView key={item.id} Project={item} props={props} />;
+    return <ProjectView key={item !== null ? item.id : -1} Project={item} props={props} />;
   };
   return (
     <View style={styles.continer}>
@@ -32,7 +32,7 @@ const Projects = ({props}) => {
         <FlatList
           data={projects}
           renderItem={childComponent}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item, index) => (index != null ? index.toString() : "0")}
           style={styles.list}
         />
       </View>

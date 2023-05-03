@@ -188,6 +188,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
     borderColor: listColors["12"],
+
   },
   footer: {
     //backgroundColor: "orange",

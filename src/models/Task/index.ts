@@ -5,7 +5,8 @@ import { BaseBuilder } from "../baseAbstracts/BaseBuilder";
 import { TaskBuilder } from "./taskBuilder";
 
 export default class Task extends Base implements ITask {
-  private _hasDate: boolean = false;
+  private _hasStartDate: boolean = false;
+  private _hasEndDate: boolean = false;
   private _startDate?: number;
   private _endDate?: number;
   private _listId: number;
@@ -15,13 +16,15 @@ export default class Task extends Base implements ITask {
   private _isCompleted: boolean;
   constructor(builder: typeof TaskBuilder.prototype) {
     super(builder);
-    this._hasDate = builder.hasDate;
+    this._hasStartDate = builder.hasStartDate;
+    this._hasEndDate = builder.hasEndDate;
     this._startDate = builder.startDate;
     this._endDate = builder.endDate;
     this._listId = builder.listId;
     this._priority = builder.priority;
     this._text = builder.text;
     this._parentType = builder.parentType;
+    this._isCompleted = builder.isCompleted;
   }
 
   public get isCompleted(): boolean {
@@ -32,8 +35,11 @@ export default class Task extends Base implements ITask {
     return this._parentType;
   }
 
-  public get hasDate(): boolean {
-    return this._hasDate;
+  public get hasStartDate(): boolean {
+    return this._hasStartDate;
+  }
+  public get hasEndDate(): boolean {
+    return this._hasEndDate;
   }
 
   public get startDate(): number {
@@ -67,13 +73,14 @@ export default class Task extends Base implements ITask {
       color: this.color,
       colorShape: this.colorShape,
       text: this.text,
-      startdate: this.startDate,
-      enddate: this.endDate,
+      startDate: this.startDate,
+      endDate: this.endDate,
       priority: this.priority,
       listId: this.listId,
       parentType: this.parentType,
       isCompleted: this.isCompleted,
-      hasDate: this.hasDate,
+      hasStartDate: this.hasStartDate,
+      hasEndDate: this.hasEndDate,
     };
     return newTask;
   }

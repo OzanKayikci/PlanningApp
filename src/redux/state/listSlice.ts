@@ -42,7 +42,7 @@ const listSlice = createSlice({
           : [];
     },
     getAllLists: (state, action: PayloadAction<IList[]>) => {
-      console.log(action.payload)
+    
       state.allLists = action.payload !== null ? action.payload : [];
     },
     deletelistById: (state, action: PayloadAction<IList["id"]>) => {

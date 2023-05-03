@@ -19,9 +19,9 @@ export class ProjectService implements IProjectService {
     groupId: IProject["groupId"]
   ): Promise<IProject | null> {
     const projects = await this.getAll().then((data) => {
-      return data;
+      return data !== null ? data : [];
     });
-    const nextId: number = projects !== null ? projects[projects.length - 1].id + 1 : 1;
+    const nextId: number = projects.length > 0 ? projects[projects.length - 1].id + 1 : 1;
     let newProject: Project = new ProjectBuilder(nextId, types.project, title, color, shape)
       .SetParentId(0)
       .setGroupId(groupId)
@@ -40,7 +40,8 @@ export class ProjectService implements IProjectService {
   public async getAll(): Promise<IProject[]> {
     const data = await getData("projects");
     this.projects = data;
-    return this.projects as IProject[];
+
+    return this.projects as IProject[] ?? [];
   }
   public async getById(id: number): Promise<IProject | undefined> {
     return this.getAll().then((data) => {

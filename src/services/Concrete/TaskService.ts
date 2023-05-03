@@ -25,10 +25,13 @@ export class TaskService implements ITaskService {
     parentType: ITask["parentType"]
   ): Promise<ITask | null> {
     const Tasks = await this.getAll().then((data) => {
-      return data;
+     
+      return data !== null ? data : [];
+
     });
-    console.log("tasjk", Tasks);
-    const netId: number = Tasks !== null ? Tasks[Tasks.length - 1].id + 1 : 200;
+
+    
+    const netId: number = Tasks.length >0 ? Tasks[Tasks.length - 1].id + 1 : 200;
     let newTask: Task = new TaskBuilder(netId, types.task, title, text, color, shape, listId)
       .SetParentId(0)
       .setGroupId(groupId)

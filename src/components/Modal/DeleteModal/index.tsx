@@ -21,6 +21,7 @@ import { IProject } from "../../../interfaces/IProject";
 import { IList } from "../../../interfaces/IList";
 import { ITaskService } from "../../../services/Abstract/ITaskService";
 import { TaskService } from "../../../services/Concrete/TaskService";
+import { deleteTaskById } from "../../../redux/state/taskSlice";
 
 //TODO:  handle klasörü oluştur. delete işlemlerini orada yap
 const deleteHandle = (
@@ -64,6 +65,16 @@ const deleteHandle = (
           console.log("bu projeye ait tasklar silindi", res);
         });
       });
+      break;
+    case types.task:
+      dispatch(deleteTaskById(id));
+      const taskService: ITaskService = new TaskService();
+      taskService.delete(id).then((res) => {
+        console.log("task silindi", res);
+        dispatch(deleteModalState());
+        dispatch(setButtonAction([false, ""]));
+      });
+
       break;
     default:
       break;

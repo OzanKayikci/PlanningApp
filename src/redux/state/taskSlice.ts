@@ -30,19 +30,26 @@ const taskSlice = createSlice({
   initialState,
   reducers: {
     addTask: (state, action: PayloadAction<ITask>) => {
-      state.tasks = [...state.tasks, action.payload];
+      console.log("taskslice", action.payload);
+
+      state.tasks = state.tasks !== null ? [...state.tasks, action.payload] : [action.payload];
+      console.log("taskslice after", state.tasks);
     },
     deleteTaskById: (state, action: PayloadAction<ITask["id"]>) => {
-      state.tasks = state.tasks.filter((task) => task.id === action.payload);
+      state.tasks = state.tasks.filter((task) => task.id !== action.payload);
     },
 
     updateTaskById: (state, action: PayloadAction<ITask>) => {
-      let existingTask = state.tasks.find((task) => task.id === action.payload.id);
-      if (existingTask) {
-        existingTask = action.payload;
-      }
+      const updatedTasks = state.tasks.map((task) => {
+        if (task.id === action.payload.id) {
+          return action.payload;
+        }
+        return task;
+      });
+      state.tasks = updatedTasks;
     },
     getProjectTasks: (state, action: PayloadAction<ITask[]>) => {
+      console.log("getProjectTasks", action.payload);
       state.tasks = action.payload;
     },
     toggleTaskCompletedById: (state, action: PayloadAction<ITask["id"]>) => {

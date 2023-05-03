@@ -26,8 +26,10 @@ const DrawerComponent = (props: any) => {
 
   }, [allProjects]);
   const childComponent = ({ item, index }: any) => {
-    return <ProjectView key={item.id} Project={item} props={props.prop.navigation}></ProjectView>;
+    return <ProjectView key={item !==null ? item.id : -1} Project={item} props={props.prop.navigation}></ProjectView>;
   };
+
+  console.log("projects", projects);
   return (
     <View style={styles.continer}>
       <View style={styles.middleView}>
@@ -38,8 +40,9 @@ const DrawerComponent = (props: any) => {
           <FlatList
             data={projects}
             renderItem={childComponent}
-            keyExtractor={(item, index) => index.toString()}
+            keyExtractor={(item, index) => index != null ? index.toString() : "0"}
             style={styles.list}
+            
           />
       
       </View>
